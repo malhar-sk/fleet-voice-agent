@@ -24,6 +24,7 @@ _HI = {
 # words that appear in both; don't let them decide
 _SHARED = {"उपकरण", "उल्लंघन", "तापमान", "मेमरी", "पेमेंट", "बंद"}
 
+_EN_FUNCTION_WORDS = {"the", "is", "are", "what", "which", "how", "of", "any", "in", "last", "many", "there", "was", "were", "does", "do", "show", "tell"}
 _DEVANAGARI = re.compile(r"[ऀ-ॿ]")
 _LATIN = re.compile(r"[A-Za-z]")
 _TOKEN = re.compile(r"[ऀ-ॿ]+|[A-Za-z]+")
@@ -52,7 +53,9 @@ def detect_text_lang(text: str, default: str = "en") -> str:
 def resolve_lang(whisper_lang: str | None, transcript: str) -> str:
     """Combine Whisper's acoustic guess with the text check (text wins for hi vs mr)."""
     text_lang = detect_text_lang(transcript, default=whisper_lang if whisper_lang in LANGS else "en")
-    if text_lang == "en" and whisper_lang in ("hi", "mr") and not _DEVANAGARI.search(transcript or ""):
-        # Hindi/Marathi speech transcribed in Latin letters: trust Whisper's guess
-        return whisper_lang
+    if text_lang == "en" and whisper_lang in ("hi", "mr"):
+        words = set(re.findall(r"[a-z']+", (transcript or "").lower()))
+        if not words & _EN_FUNCTION_WORDS:
+            # romanised Hindi/Marathi ("abhi kaunse device offline hai"): trust Whisper's guess
+            return whisper_lang
     return text_lang

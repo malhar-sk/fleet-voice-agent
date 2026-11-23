@@ -1,0 +1,25 @@
+{
+  "question": "which devices are offline?",
+  "lang": "en",
+  "answer": "None of the five devices are offline right now.",
+  "tool_calls": [
+    {
+      "tool": "list_offline_devices",
+      "args": {},
+      "result": {
+        "total_devices": 5,
+        "offline_count": 0,
+        "offline": [],
+        "offline_after_seconds": 120
+      },
+      "ms": 31.2
+    }
+  ],
+  "llm_ms": 5558.1,
+  "tools_ms": 31.2,
+  "total_ms": 5589.4,
+  "backend": "claude_cli",
+  "model": "claude-haiku-5-5",
+  "llm_rounds": 2,
+  "cached": false
+}
