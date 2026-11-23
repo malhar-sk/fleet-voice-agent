@@ -12,7 +12,5 @@ alerts_out/*
 !alerts_out/.gitkeep
 !alerts_out/sample/
 n8n_data/
-evals/audio/*.wav
-!evals/audio/README.md
 *.egg-info/
 .DS_Store

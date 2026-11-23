@@ -1,6 +1,7 @@
 """Generate the eval audio with Piper. ALL OF IT IS SYNTHETIC SPEECH (TTS), not human recordings.
 
-  python -m evals.make_audio            # questions.jsonl + dev_questions.jsonl -> evals/audio/*.wav
+  python -m evals.make_audio            # no-op if the committed WAVs are present
+  python -m evals.make_audio --force    # regenerate (Piper samples noise: new clips differ slightly from the committed ones)
 Question voices differ from the reply voices (en: amy, hi: rohan, mr: google speaker 4), see voice/tts.py.
 Noisy variants: the clean clip + pink noise + quiet babble (other questions) + 50 Hz hum, mixed at 10 dB SNR.
 A manifest with sha256 per file is written to evals/audio/manifest.json.
@@ -57,8 +58,14 @@ def mix_noise(clean: np.ndarray, sr: int, babble_src: list[np.ndarray], snr_db: 
 
 
 def main():
-    tts = PiperTTS(voices=QUESTION_VOICES)
+    import sys
+    force = "--force" in sys.argv
     rows = load("evals/questions.jsonl") + load("evals/dev_questions.jsonl")
+    if not force and all(os.path.exists(os.path.join(ROOT, r["audio"])) for r in rows):
+        print("eval audio already present (committed; Piper is not deterministic, so regenerating changes the clips). "
+              "Use --force to regenerate.")
+        return
+    tts = PiperTTS(voices=QUESTION_VOICES)
     clean: dict[str, tuple[np.ndarray, int]] = {}
     manifest = {}
     pad = 0.3

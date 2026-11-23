@@ -5,7 +5,7 @@ DEVICE ?= pi-3
 MINUTES ?= 10
 COMPOSE ?= docker compose
 
-.PHONY: help up down ps logs chaos recover freeze unfreeze breaches test test-live eval eval-audio examples venv models dashboard n8n-import
+.PHONY: help up down ps logs chaos recover freeze unfreeze breaches test test-live eval eval-audio examples examples-webrtc alert-timeline models dashboard
 
 help:
 	@grep -E '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -53,5 +53,14 @@ eval: ## Voice eval (30 questions + 5 noisy) -> evals/results + RESULTS table
 eval-audio: ## (Re)generate the synthetic question audio
 	$(PY) -m evals.make_audio
 
-examples: ## Scripted end-to-end run over recorded audio -> examples/
+examples: ## Scripted end-to-end run over recorded audio -> examples/offline/
 	$(PY) -m scripts.run_examples
+
+examples-webrtc: ## Same over a real WebRTC session (app must be running on 17860)
+	$(PY) -m scripts.webrtc_client --out examples/webrtc evals/audio/en01.wav evals/audio/hi01.wav evals/audio/mr01.wav
+
+alert-timeline: ## make chaos -> Grafana -> n8n -> voice note, with timings
+	$(PY) -m scripts.alert_timeline --device $(DEVICE)
+
+models: ## Download Whisper small + Piper voices into ./models (~780 MB)
+	$(PY) scripts/download_models.py

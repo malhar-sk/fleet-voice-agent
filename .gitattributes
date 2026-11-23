@@ -1,0 +1,5 @@
+# Containers run these files: keep LF even on Windows checkouts (CRLF breaks /start.sh in n8n)
+* text=auto eol=lf
+*.png binary
+*.wav binary
+*.ogg binary
