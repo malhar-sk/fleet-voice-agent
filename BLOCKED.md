@@ -1,6 +1,6 @@
 # BLOCKED
 
-## CI workflow is at `ci/github-workflows/ci.yml`, not `.github/workflows/ci.yml` (M6, partly blocked)
+## ~~CI workflow staged in ci/~~ RESOLVED 2026-11-23: token given workflow scope, file moved to `.github/workflows/ci.yml`
 
 - **What:** GitHub rejects pushes that add files under `.github/workflows/` unless the token has the `workflow` scope.
   The build host's `gh` token has only `repo` (`gh auth status` → "Token scopes: 'repo'"). The previous project on this
