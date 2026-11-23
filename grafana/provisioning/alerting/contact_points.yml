@@ -1,0 +1,19 @@
+# Every alert goes to n8n's webhook; the n8n workflow turns it into a voice note.
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: n8n-voice-alerts
+    receivers:
+      - uid: n8n-webhook
+        type: webhook
+        settings:
+          url: http://n8n:5678/webhook/voice-alert
+          httpMethod: POST
+        disableResolveMessage: true
+policies:
+  - orgId: 1
+    receiver: n8n-voice-alerts
+    group_by: ['alertname', 'device_id']
+    group_wait: 5s
+    group_interval: 1m
+    repeat_interval: 4h

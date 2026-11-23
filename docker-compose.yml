@@ -1,0 +1,66 @@
+# fleet-voice-agent: the whole stack with one command (`docker compose up -d`).
+# Host ports are high and bound to 127.0.0.1 by default (shared server); change them in .env.
+# Memory budget (mem_limit): VM 256m + Grafana 320m + sim 64m + n8n 512m + app 1700m ≈ 2.85 GB.
+name: fleet-voice-agent
+
+services:
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:v1.155.0
+    restart: unless-stopped
+    command:
+      - "-storageDataPath=/storage"
+      - "-search.latencyOffset=5s"
+      - "-retentionPeriod=7d"
+      - "-memory.allowedPercent=40"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:${VM_PORT:-18428}:8428"
+    volumes:
+      - vm_data:/storage
+    mem_limit: 256m
+    cpus: "0.5"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8428/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  grafana:
+    image: grafana/grafana:13.3.0
+    restart: unless-stopped
+    depends_on: [victoriametrics]
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/fleet.json
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:${GRAFANA_PORT:-13000}:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    mem_limit: 320m
+    cpus: "0.5"
+
+  fleet-sim:
+    build:
+      context: .
+      dockerfile: fleet_sim/Dockerfile
+    image: fleet-voice-agent-sim:local
+    restart: unless-stopped
+    depends_on: [victoriametrics]
+    environment:
+      VM_URL: http://victoriametrics:8428
+      PUSH_INTERVAL: ${PUSH_INTERVAL:-5}
+      FLAP_PROB_PER_MIN: ${FLAP_PROB_PER_MIN:-0.01}
+      BREACH_BURST_PROB_PER_MIN: ${BREACH_BURST_PROB_PER_MIN:-0.05}
+      CHAOS_FILE: /state/chaos.json
+    volumes:
+      - ./state:/state
+    mem_limit: 64m
+    cpus: "0.25"
+
+volumes:
+  vm_data:
+  grafana_data:

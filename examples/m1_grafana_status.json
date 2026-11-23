@@ -1,0 +1,127 @@
+{
+  "recorded_at": "2026-11-23T02:46:27Z",
+  "query_via": "Grafana datasource proxy (uid=victoriametrics)",
+  "expr": "max by (device_id) (time() - tlast_over_time(device_uptime_seconds{job=\"fleet-sim\"}[1d]))",
+  "devices": [
+    {
+      "device": "pi-1",
+      "last_seen_s_ago": 1.7,
+      "status": "ONLINE"
+    },
+    {
+      "device": "pi-2",
+      "last_seen_s_ago": 1.7,
+      "status": "ONLINE"
+    },
+    {
+      "device": "pi-3",
+      "last_seen_s_ago": 186.7,
+      "status": "OFFLINE"
+    },
+    {
+      "device": "pi-4",
+      "last_seen_s_ago": 1.7,
+      "status": "ONLINE"
+    },
+    {
+      "device": "pi-5",
+      "last_seen_s_ago": 1.7,
+      "status": "ONLINE"
+    }
+  ],
+  "grafana_alerts": [
+    {
+      "alert": "DeviceSilent",
+      "device": "pi-1",
+      "state": "Normal",
+      "activeAt": "2026-11-23T02:42:50Z"
+    },
+    {
+      "alert": "DeviceSilent",
+      "device": "pi-2",
+      "state": "Normal",
+      "activeAt": "2026-11-23T02:42:50Z"
+    },
+    {
+      "alert": "DeviceSilent",
+      "device": "pi-3",
+      "state": "Alerting",
+      "activeAt": "2026-11-23T02:45:30Z"
+    },
+    {
+      "alert": "DeviceSilent",
+      "device": "pi-4",
+      "state": "Normal",
+      "activeAt": "2026-11-23T02:42:50Z"
+    },
+    {
+      "alert": "DeviceSilent",
+      "device": "pi-5",
+      "state": "Normal",
+      "activeAt": "2026-11-23T02:42:50Z"
+    },
+    {
+      "alert": "PaymentSLABreaches",
+      "device": null,
+      "state": "Normal",
+      "activeAt": "2026-11-23T02:42:50Z"
+    }
+  ],
+  "raw": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "device_id": "pi-1"
+          },
+          "value": [
+            1795401987,
+            "1.7280001640319824"
+          ]
+        },
+        {
+          "metric": {
+            "device_id": "pi-2"
+          },
+          "value": [
+            1795401987,
+            "1.7280001640319824"
+          ]
+        },
+        {
+          "metric": {
+            "device_id": "pi-3"
+          },
+          "value": [
+            1795401987,
+            "186.73399996757507"
+          ]
+        },
+        {
+          "metric": {
+            "device_id": "pi-4"
+          },
+          "value": [
+            1795401987,
+            "1.7280001640319824"
+          ]
+        },
+        {
+          "metric": {
+            "device_id": "pi-5"
+          },
+          "value": [
+            1795401987,
+            "1.7280001640319824"
+          ]
+        }
+      ]
+    },
+    "stats": {
+      "seriesFetched": "5",
+      "executionTimeMsec": 0
+    }
+  }
+}
