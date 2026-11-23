@@ -51,6 +51,7 @@ class AgentResult:
     model: str = ""
     llm_rounds: int = 0
     cached: bool = False
+    llm_api_ms: float | None = None   # claude_cli only: API time reported by the CLI (excludes process start-up)
 
     def to_dict(self) -> dict:
         d = asdict(self)
@@ -116,6 +117,7 @@ class CompletionBackend(Backend):
         self.model = model
         self.use_cache = use_cache
         self.last_cached = False
+        self.last_api_ms: float | None = None
 
     def complete(self, system: str, prompt: str) -> str:  # pragma: no cover
         raise NotImplementedError
@@ -124,7 +126,9 @@ class CompletionBackend(Backend):
         key = hashlib.sha256(f"{self.name}|{self.model}|{system}|{prompt}".encode()).hexdigest()
         path = CACHE_DIR / f"{key}.json"
         if self.use_cache and path.exists():
+            self.last_api_ms = None
             return json.loads(path.read_text())["text"], True
+        self.last_api_ms = None
         text = self.complete(system, prompt)
         try:
             CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -135,10 +139,11 @@ class CompletionBackend(Backend):
 
     def respond(self, question, lang):
         t0 = time.perf_counter()
-        llm_ms, cached_any = 0.0, False
+        llm_ms, cached_any, api_ms = 0.0, False, []
         a = time.perf_counter()
         raw, c1 = self._cached_complete(prompts.cli_plan_system(), prompts.user_turn(question, lang))
         llm_ms += (time.perf_counter() - a) * 1000
+        api_ms.append(self.last_api_ms)
         rounds = 1
         try:
             plan = _extract_json(raw)
@@ -154,12 +159,14 @@ class CompletionBackend(Backend):
             ans, c2 = self._cached_complete(prompts.cli_answer_system(), prompts.answer_turn(
                 question, lang, [{"tool": t.tool, "args": t.args, "result": t.result} for t in tcs]))
             llm_ms += (time.perf_counter() - a) * 1000
+            api_ms.append(self.last_api_ms)
             rounds += 1
             cached_any = c1 or c2
         total = (time.perf_counter() - t0) * 1000
         return AgentResult(question, lang, clean_spoken(ans), tcs, llm_ms=round(llm_ms, 1), tools_ms=round(tools_ms, 1),
                            total_ms=round(total, 1), backend=self.name, model=self.model, llm_rounds=rounds,
-                           cached=cached_any)
+                           cached=cached_any,
+                           llm_api_ms=round(sum(api_ms), 1) if api_ms and all(x is not None for x in api_ms) else None)
 
 
 class ClaudeCLIBackend(CompletionBackend):
@@ -169,11 +176,14 @@ class ClaudeCLIBackend(CompletionBackend):
         cmd = ["claude", "-p", "--model", self.model, "--output-format", "json", "--tools", "",
                "--system-prompt", system, "--setting-sources", "", "--strict-mcp-config",
                "--no-session-persistence", prompt]
+        # skip claude.ai MCP connectors and non-essential traffic: cuts CLI start-up from ~1.3 s to ~0.6 s
+        env = {**os.environ, "ENABLE_CLAUDEAI_MCP_SERVERS": "false", "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"}
         with tempfile.TemporaryDirectory() as d:  # empty cwd: no project files leak into the prompt
-            p = subprocess.run(cmd, capture_output=True, text=True, timeout=90, cwd=d)
+            p = subprocess.run(cmd, capture_output=True, text=True, timeout=90, cwd=d, env=env)
         if p.returncode != 0:
             raise RuntimeError(f"claude CLI failed ({p.returncode}): {p.stderr[-300:] or p.stdout[-300:]}")
         out = json.loads(p.stdout)
+        self.last_api_ms = out.get("duration_api_ms")
         if out.get("is_error"):
             raise RuntimeError(f"claude CLI error: {out.get('result')}")
         return out.get("result", "")

@@ -1,0 +1,66 @@
+{
+  "input": "evals/audio/mr01.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 17721.2,
+  "turn": {
+    "type": "turn",
+    "transcript": "सद्धा कोंती उपकरने अप्लाइ आहेत.",
+    "lang": "mr",
+    "answer": "pi 1, pi 2, pi 4 आणि pi 5 सध्या ऑनलाइन आहेत. pi 3 सुमारे 20 मिनिटांपासून ऑफलाइन आहे.",
+    "tool_calls": [
+      {
+        "tool": "list_devices",
+        "args": {}
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 4419.8,
+      "stt_detect_ms": 3179.9,
+      "stt_transcribe_ms": 1239.9,
+      "llm_ms": 12498.8,
+      "llm_api_ms": 3757,
+      "tools_ms": 8.3,
+      "agent_ms": 12507.2,
+      "tts_first_ms": 293.7,
+      "tts_total_ms": 502.3,
+      "v2v_first_audio_ms": 17220.7,
+      "total_ms": 17429.3
+    }
+  },
+  "reply_audio": "examples/webrtc/mr01.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "सद्धा कोंती उपकरने अप्लाइ आहेत.",
+      "lang": "mr",
+      "answer": "pi 1, pi 2, pi 4 आणि pi 5 सध्या ऑनलाइन आहेत. pi 3 सुमारे 20 मिनिटांपासून ऑफलाइन आहे.",
+      "tool_calls": [
+        {
+          "tool": "list_devices",
+          "args": {}
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 4419.8,
+        "stt_detect_ms": 3179.9,
+        "stt_transcribe_ms": 1239.9,
+        "llm_ms": 12498.8,
+        "llm_api_ms": 3757,
+        "tools_ms": 8.3,
+        "agent_ms": 12507.2,
+        "tts_first_ms": 293.7,
+        "tts_total_ms": 502.3,
+        "v2v_first_audio_ms": 17220.7,
+        "total_ms": 17429.3
+      }
+    }
+  ]
+}

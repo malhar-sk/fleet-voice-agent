@@ -1,0 +1,56 @@
+{
+  "input": "evals/audio/mr08.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 13439.3,
+  "turn": {
+    "type": "turn",
+    "transcript": "गेल्या दाहमेंनिताद पाई ची मेमरी किती होती.",
+    "lang": "mr",
+    "answer": "कोणत्या पाईबद्दल विचारत आहात ते सांगा, उदाहरणार्थ pi 3. त्यानंतर मी गेल्या दहा मिनिटांतील त्याची मेमरी सांगेन.",
+    "tool_calls": [],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 4872.1,
+      "stt_detect_ms": 3210.5,
+      "stt_transcribe_ms": 1661.5,
+      "llm_ms": 7790.6,
+      "llm_api_ms": 3464,
+      "tools_ms": 0.0,
+      "agent_ms": 7790.8,
+      "tts_first_ms": 292.4,
+      "tts_total_ms": 577.4,
+      "v2v_first_audio_ms": 12955.2,
+      "total_ms": 13240.2
+    }
+  },
+  "reply_audio": "examples/webrtc/mr08.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "गेल्या दाहमेंनिताद पाई ची मेमरी किती होती.",
+      "lang": "mr",
+      "answer": "कोणत्या पाईबद्दल विचारत आहात ते सांगा, उदाहरणार्थ pi 3. त्यानंतर मी गेल्या दहा मिनिटांतील त्याची मेमरी सांगेन.",
+      "tool_calls": [],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 4872.1,
+        "stt_detect_ms": 3210.5,
+        "stt_transcribe_ms": 1661.5,
+        "llm_ms": 7790.6,
+        "llm_api_ms": 3464,
+        "tools_ms": 0.0,
+        "agent_ms": 7790.8,
+        "tts_first_ms": 292.4,
+        "tts_total_ms": 577.4,
+        "v2v_first_audio_ms": 12955.2,
+        "total_ms": 13240.2
+      }
+    }
+  ]
+}

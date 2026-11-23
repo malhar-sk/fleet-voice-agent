@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fleet voice agent</title>
+<style>
+  :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #1f2328; }
+  body { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
+  h1 { font-size: 1.4rem; margin-bottom: .2rem; }
+  .sub { color: #59636e; margin-top: 0; }
+  .row { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; margin: 1.2rem 0; }
+  button { font-size: 1.05rem; padding: .7rem 1.3rem; border-radius: 10px; border: 1px solid #d0d7de; background: #f6f8fa; cursor: pointer; }
+  button.primary { background: #1f6feb; color: #fff; border-color: #1f6feb; }
+  button.live { background: #cf222e; border-color: #cf222e; color: #fff; }
+  button:disabled { opacity: .5; cursor: default; }
+  #status { font-weight: 600; }
+  .turn { border: 1px solid #d0d7de; border-radius: 10px; padding: .7rem .9rem; margin: .6rem 0; }
+  .you { color: #59636e; } .bot { margin-top: .3rem; }
+  .meta { font-size: .8rem; color: #59636e; margin-top: .35rem; font-family: ui-monospace, monospace; }
+  .note { font-size: .85rem; color: #59636e; border-left: 3px solid #d0d7de; padding-left: .7rem; }
+  code { background: #f6f8fa; padding: 0 .25rem; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>Fleet voice agent</h1>
+<p class="sub">Ask about the simulated device fleet in English, हिंदी or मराठी. Try “Which devices are offline?” or “अभी कौन से डिवाइस ऑफ़लाइन हैं?”</p>
+
+<div class="row">
+  <button id="talk" class="primary">🎙️ Talk (live, WebRTC)</button>
+  <button id="ptt">Hold to talk (fallback)</button>
+  <span id="status">idle</span>
+</div>
+<p class="note">Live mode streams your mic over WebRTC to a Pipecat pipeline (VAD → Whisper → LLM + tools → Piper).
+If it connects but you hear nothing (WebRTC media can't cross an SSH tunnel or Docker Desktop's NAT), use
+<b>Hold to talk</b>: it records while you hold the button and sends the clip over plain HTTP.
+The browser needs microphone permission (Chrome on <code>localhost</code> is fine). Demonstration only, synthetic data.</p>
+
+<div id="log"></div>
+<audio id="remote" autoplay></audio>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const statusEl = $("status");
+let pc = null, dc = null, micStream = null;
+
+function setStatus(s) { statusEl.textContent = s; }
+function esc(s) { return (s || "").replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+function addTurn(t) {
+  const d = document.createElement("div");
+  d.className = "turn";
+  const tools = (t.tool_calls || (t.agent && t.agent.tool_calls) || []).map(c => `${c.tool}(${JSON.stringify(c.args)})`).join(", ");
+  const tm = t.timings_ms || {};
+  d.innerHTML = `<div class="you">🗣️ [${esc(t.lang)}] ${esc(t.transcript) || "<i>(nothing heard)</i>"}</div>
+    <div class="bot">🤖 ${esc(t.answer)}</div>
+    <div class="meta">tools: ${esc(tools) || "none"} · stt ${tm.stt_ms ?? "-"} ms · llm ${tm.llm_ms ?? "-"} ms · tts(first) ${tm.tts_first_ms ?? "-"} ms · voice-to-voice ${tm.v2v_first_audio_ms ?? "-"} ms</div>`;
+  $("log").prepend(d);
+}
+
+// ---------------------------------------------------------------- live WebRTC (Pipecat SmallWebRTC)
+async function startLive() {
+  setStatus("connecting…");
+  micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+  pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+  pc.addTransceiver(micStream.getAudioTracks()[0], { direction: "sendrecv" });
+  pc.addTransceiver("video", { direction: "sendrecv" });   // Pipecat expects audio=0, video=1 slots
+  dc = pc.createDataChannel("chat", { ordered: true });
+  dc.onmessage = (ev) => {
+    let m; try { m = JSON.parse(ev.data); } catch { return; }
+    const msg = m.message || m.data || m;
+    if (msg.type === "listening") setStatus("listening…");
+    else if (msg.type === "thinking") setStatus("thinking…");
+    else if (msg.type === "turn") { addTurn(msg); setStatus("live: speak any time"); }
+    else if (msg.type === "error") setStatus("error: " + msg.error);
+  };
+  pc.ontrack = (ev) => { if (ev.track.kind === "audio") $("remote").srcObject = new MediaStream([ev.track]); };
+  pc.onconnectionstatechange = () => {
+    if (pc && pc.connectionState === "connected") setStatus("live: speak any time");
+    if (pc && ["failed", "disconnected"].includes(pc.connectionState)) setStatus("WebRTC " + pc.connectionState + ": try Hold to talk");
+  };
+  await pc.setLocalDescription(await pc.createOffer());
+  await new Promise((res) => {           // send one offer with all ICE candidates (no trickle)
+    if (pc.iceGatheringState === "complete") return res();
+    const t = setTimeout(res, 3000);
+    pc.onicegatheringstatechange = () => { if (pc.iceGatheringState === "complete") { clearTimeout(t); res(); } };
+  });
+  const r = await fetch("/api/offer", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ sdp: pc.localDescription.sdp, type: pc.localDescription.type }) });
+  if (!r.ok) throw new Error("offer failed: " + r.status);
+  await pc.setRemoteDescription(await r.json());
+  $("talk").textContent = "⏹ Stop"; $("talk").className = "live";
+}
+function stopLive() {
+  if (pc) pc.close(); pc = null; dc = null;
+  if (micStream) micStream.getTracks().forEach(t => t.stop()); micStream = null;
+  $("talk").textContent = "🎙️ Talk (live, WebRTC)"; $("talk").className = "primary"; setStatus("idle");
+}
+$("talk").onclick = async () => {
+  if (pc) return stopLive();
+  try { await startLive(); } catch (e) { setStatus("error: " + e.message); stopLive(); }
+};
+
+// ---------------------------------------------------------------- push-to-talk fallback (HTTP)
+let rec = null;
+async function pttStart() {
+  if (rec) return;
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+  const ctx = new AudioContext();
+  const src = ctx.createMediaStreamSource(stream);
+  const proc = ctx.createScriptProcessor(4096, 1, 1);
+  const chunks = [];
+  proc.onaudioprocess = (e) => chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+  src.connect(proc); proc.connect(ctx.destination);
+  rec = { stream, ctx, proc, chunks };
+  setStatus("recording… release to send");
+}
+function encodeWav(chunks, sr) {
+  const n = chunks.reduce((a, c) => a + c.length, 0);
+  const buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+  const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  w(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); w(8, "WAVE"); w(12, "fmt "); v.setUint32(16, 16, true);
+  v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true);
+  v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, "data"); v.setUint32(40, n * 2, true);
+  let o = 44;
+  for (const c of chunks) for (let i = 0; i < c.length; i++, o += 2) v.setInt16(o, Math.max(-1, Math.min(1, c[i])) * 0x7fff, true);
+  return new Blob([buf], { type: "audio/wav" });
+}
+async function pttStop() {
+  if (!rec) return;
+  const { stream, ctx, proc, chunks } = rec; rec = null;
+  proc.disconnect(); stream.getTracks().forEach(t => t.stop());
+  const wav = encodeWav(chunks, ctx.sampleRate); await ctx.close();
+  setStatus("thinking…");
+  const fd = new FormData(); fd.append("audio", wav, "turn.wav");
+  try {
+    const r = await fetch("/api/turn", { method: "POST", body: fd });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.detail || r.status);
+    addTurn({ ...j, tool_calls: (j.agent && j.agent.tool_calls) || [] });
+    if (j.audio_wav_b64) new Audio("data:audio/wav;base64," + j.audio_wav_b64).play();
+    setStatus("idle");
+  } catch (e) { setStatus("error: " + e.message); }
+}
+const ptt = $("ptt");
+ptt.addEventListener("mousedown", pttStart); ptt.addEventListener("touchstart", (e) => { e.preventDefault(); pttStart(); });
+ptt.addEventListener("mouseup", pttStop); ptt.addEventListener("mouseleave", pttStop); ptt.addEventListener("touchend", pttStop);
+</script>
+</body>
+</html>

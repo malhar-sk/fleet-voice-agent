@@ -1,0 +1,10 @@
+{"id": "dev_en1", "lang": "en", "text": "What's the uptime of pi 1?", "audio": "evals/audio/dev/dev_en1.wav", "synthetic_speech": true}
+{"id": "dev_en2", "lang": "en", "text": "Show me the CPU load on pi 3.", "audio": "evals/audio/dev/dev_en2.wav", "synthetic_speech": true}
+{"id": "dev_hi1", "lang": "hi", "text": "पाई 4 का अपटाइम कितना है?", "audio": "evals/audio/dev/dev_hi1.wav", "synthetic_speech": true}
+{"id": "dev_hi2", "lang": "hi", "text": "कौन सा डिवाइस अभी चुप है?", "audio": "evals/audio/dev/dev_hi2.wav", "synthetic_speech": true}
+{"id": "dev_hi3", "lang": "hi", "text": "पाई 2 का हाल बताओ।", "audio": "evals/audio/dev/dev_hi3.wav", "synthetic_speech": true}
+{"id": "dev_hi4", "lang": "hi", "text": "पिछले 15 मिनट में भुगतान में कितनी देरी हुई?", "audio": "evals/audio/dev/dev_hi4.wav", "synthetic_speech": true}
+{"id": "dev_mr1", "lang": "mr", "text": "पाई 2 चे अपटाइम किती आहे?", "audio": "evals/audio/dev/dev_mr1.wav", "synthetic_speech": true}
+{"id": "dev_mr2", "lang": "mr", "text": "आत्ता कोणते उपकरण बंद आहे?", "audio": "evals/audio/dev/dev_mr2.wav", "synthetic_speech": true}
+{"id": "dev_mr3", "lang": "mr", "text": "पाई 5 कसे चालले आहे?", "audio": "evals/audio/dev/dev_mr3.wav", "synthetic_speech": true}
+{"id": "dev_mr4", "lang": "mr", "text": "गेल्या 15 मिनिटांत किती संदेश उशिरा पोहोचले?", "audio": "evals/audio/dev/dev_mr4.wav", "synthetic_speech": true}

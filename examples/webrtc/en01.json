@@ -1,0 +1,66 @@
+{
+  "input": "evals/audio/en01.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 17211.6,
+  "turn": {
+    "type": "turn",
+    "transcript": "Which devices are offline right now?",
+    "lang": "en",
+    "answer": "Only pi 3 is offline right now, silent for about 18 minutes.",
+    "tool_calls": [
+      {
+        "tool": "list_offline_devices",
+        "args": {}
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 4051.8,
+      "stt_detect_ms": 3591.0,
+      "stt_transcribe_ms": 460.8,
+      "llm_ms": 12483.7,
+      "llm_api_ms": 3815,
+      "tools_ms": 33.2,
+      "agent_ms": 12517.2,
+      "tts_first_ms": 331.5,
+      "tts_total_ms": 331.5,
+      "v2v_first_audio_ms": 16900.6,
+      "total_ms": 16900.6
+    }
+  },
+  "reply_audio": "examples/webrtc/en01.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "Which devices are offline right now?",
+      "lang": "en",
+      "answer": "Only pi 3 is offline right now, silent for about 18 minutes.",
+      "tool_calls": [
+        {
+          "tool": "list_offline_devices",
+          "args": {}
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 4051.8,
+        "stt_detect_ms": 3591.0,
+        "stt_transcribe_ms": 460.8,
+        "llm_ms": 12483.7,
+        "llm_api_ms": 3815,
+        "tools_ms": 33.2,
+        "agent_ms": 12517.2,
+        "tts_first_ms": 331.5,
+        "tts_total_ms": 331.5,
+        "v2v_first_audio_ms": 16900.6,
+        "total_ms": 16900.6
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "input": "evals/audio/en09.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 15270.8,
+  "turn": {
+    "type": "turn",
+    "transcript": "How many payment SLA breaches were there in the last 10 minutes?",
+    "lang": "en",
+    "answer": "Zero payment SLA breaches were recorded in the last 10 minutes.",
+    "tool_calls": [
+      {
+        "tool": "sla_breaches",
+        "args": {
+          "minutes": 10
+        }
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 3798.0,
+      "stt_detect_ms": 3195.6,
+      "stt_transcribe_ms": 602.3,
+      "llm_ms": 10692.7,
+      "llm_api_ms": 2059,
+      "tools_ms": 8.6,
+      "agent_ms": 10701.4,
+      "tts_first_ms": 305.4,
+      "tts_total_ms": 305.4,
+      "v2v_first_audio_ms": 14804.9,
+      "total_ms": 14804.9
+    }
+  },
+  "reply_audio": "examples/webrtc/en09.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "How many payment SLA breaches were there in the last 10 minutes?",
+      "lang": "en",
+      "answer": "Zero payment SLA breaches were recorded in the last 10 minutes.",
+      "tool_calls": [
+        {
+          "tool": "sla_breaches",
+          "args": {
+            "minutes": 10
+          }
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 3798.0,
+        "stt_detect_ms": 3195.6,
+        "stt_transcribe_ms": 602.3,
+        "llm_ms": 10692.7,
+        "llm_api_ms": 2059,
+        "tools_ms": 8.6,
+        "agent_ms": 10701.4,
+        "tts_first_ms": 305.4,
+        "tts_total_ms": 305.4,
+        "v2v_first_audio_ms": 14804.9,
+        "total_ms": 14804.9
+      }
+    }
+  ]
+}
