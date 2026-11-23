@@ -1,0 +1,230 @@
+{
+  "id": "fleetVoiceAlert1",
+  "name": "Fleet voice alert (Grafana -> TTS -> Telegram or alerts_out)",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice-alert",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "Grafana webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "5d0b3c7e-9f6a-4a51-a0c2-voicealert01"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grafana webhook payload -> one spoken sentence per FIRING alert.\n// Language for the voice note: ALERT_LANG = en | hi | mr (default en).\nconst body = $input.first().json.body || $input.first().json;\nconst lang = ['en', 'hi', 'mr'].includes($env.ALERT_LANG) ? $env.ALERT_LANG : 'en';\nconst out = [];\nfor (const a of (body.alerts || [])) {\n  if (a.status !== 'firing') continue;\n  const labels = a.labels || {};\n  const values = a.values || {};\n  const kind = labels.kind || labels.alertname;\n  let text;\n  if (kind === 'device_silent' || labels.alertname === 'DeviceSilent') {\n    const dev = (labels.device_id || 'a device');\n    const spoken = dev.replace('-', ' ');\n    const mins = Math.max(1, Math.round((Number(values.B) || 120) / 60));\n    text = {\n      en: `Alert: ${spoken} has been offline for ${mins} minutes.`,\n      hi: `चेतावनी: ${spoken} ${mins} मिनट से ऑफ़लाइन है।`,\n      mr: `सूचना: ${spoken} ${mins} मिनिटांपासून ऑफलाइन आहे.`,\n    }[lang];\n  } else if (kind === 'sla_breach' || labels.alertname === 'PaymentSLABreaches') {\n    const n = Math.round(Number(values.B) || 0);\n    text = {\n      en: `Alert: ${n} payment SLA breaches in the last 5 minutes.`,\n      hi: `चेतावनी: पिछले 5 मिनट में ${n} पेमेंट एसएलए उल्लंघन हुए।`,\n      mr: `सूचना: गेल्या 5 मिनिटांत ${n} पेमेंट एसएलए उल्लंघने झाली.`,\n    }[lang];\n  } else {\n    text = (a.annotations && a.annotations.summary) || `Alert ${labels.alertname} is firing.`;\n  }\n  const stamp = new Date().toISOString().replace(/[:.]/g, '-');\n  const who = (labels.device_id || labels.alertname || 'alert').replace(/[^a-zA-Z0-9_-]/g, '_');\n  out.push({ json: { text, lang, alertname: labels.alertname, device: labels.device_id || null,\n                     startsAt: a.startsAt, receivedAt: new Date().toISOString(),\n                     filename: `${stamp}_${who}.ogg` } });\n}\nreturn out;"
+      },
+      "id": "a1b2c3d4-0002-4000-8000-000000000002",
+      "name": "Build sentence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.VOICE_APP_URL || 'http://voice-app:7860' }}/tts",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: $json.text, lang: $json.lang, format: 'ogg' }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          },
+          "timeout": 60000
+        }
+      },
+      "id": "a1b2c3d4-0003-4000-8000-000000000003",
+      "name": "TTS (voice app /tts)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c0ffee00-0000-4000-8000-000000000010",
+              "leftValue": "={{ !!($env.TELEGRAM_BOT_TOKEN && $env.TELEGRAM_CHAT_ID) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0004-4000-8000-000000000004",
+      "name": "Telegram configured?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        660,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendVoice",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{ $env.TELEGRAM_CHAT_ID }}"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "voice",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "caption",
+              "value": "={{ $('Build sentence').item.json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0005-4000-8000-000000000005",
+      "name": "Telegram sendVoice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/alerts_out/{{ $('Build sentence').item.json.filename }}",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0006-4000-8000-000000000006",
+      "name": "Save .ogg to alerts_out",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        900,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Append one JSON line per delivered alert to /alerts_out/alerts.log (the \"mock Telegram\" log).\nconst fs = require('fs');\nconst results = [];\nfor (const item of $input.all()) {\n  const src = $('Build sentence').all()[results.length] || { json: {} };\n  const line = { ...src.json, delivered: 'file', path: `/alerts_out/${src.json.filename}`,\n                 telegram: 'not configured (TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID empty): saved to alerts_out instead',\n                 savedAt: new Date().toISOString() };\n  fs.appendFileSync('/alerts_out/alerts.log', JSON.stringify(line) + '\\n');\n  results.push({ json: line });\n}\nreturn results;"
+      },
+      "id": "a1b2c3d4-0007-4000-8000-000000000007",
+      "name": "Log alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Grafana webhook": {
+      "main": [
+        [
+          {
+            "node": "Build sentence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build sentence": {
+      "main": [
+        [
+          {
+            "node": "TTS (voice app /tts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TTS (voice app /tts)": {
+      "main": [
+        [
+          {
+            "node": "Telegram configured?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram configured?": {
+      "main": [
+        [
+          {
+            "node": "Telegram sendVoice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save .ogg to alerts_out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save .ogg to alerts_out": {
+      "main": [
+        [
+          {
+            "node": "Log alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "note": "Telegram path runs only when TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are set; otherwise the voice note is saved to alerts_out/ and logged."
+  }
+}

@@ -1,0 +1,5 @@
+# tests + eval (CI installs only the light part: see .github/workflows/ci.yml)
+pytest==9.*
+pytest-asyncio
+jiwer==4.0.0
+httpx==0.28.1

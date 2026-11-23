@@ -1,0 +1,11 @@
+.venv
+.git
+models
+.cache
+logs
+alerts_out
+state
+evals/audio
+examples
+n8n_data
+__pycache__

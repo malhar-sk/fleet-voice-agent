@@ -1,0 +1,64 @@
+{
+  "device": "pi-2",
+  "started": "2026-11-23T03:31:37.822Z",
+  "events": [
+    {
+      "t": "2026-11-23T03:31:37.822Z",
+      "s": 0.0,
+      "event": "make chaos DEVICE=pi-2 (device forced silent)",
+      "detail": [
+        "pi-2 forced OFFLINE for 6 min"
+      ]
+    },
+    {
+      "t": "2026-11-23T03:33:44.936Z",
+      "s": 127.1,
+      "event": "pi-2 OFFLINE in VictoriaMetrics (silent 121 s > 120 s)"
+    },
+    {
+      "t": "2026-11-23T03:33:50.992Z",
+      "s": 133.2,
+      "event": "Grafana DeviceSilent alert state = Alerting"
+    },
+    {
+      "t": "2026-11-23T03:33:55.366Z",
+      "s": 137.5,
+      "event": "n8n webhook received the Grafana notification"
+    },
+    {
+      "t": "2026-11-23T03:33:55.873Z",
+      "s": 138.1,
+      "event": "voice note saved: alerts_out/2026-11-23T03-33-55-366Z_pi-2.ogg (Telegram not configured)"
+    }
+  ],
+  "delivered": {
+    "text": "Alert: pi 2 has been offline for 2 minutes.",
+    "lang": "en",
+    "alertname": "DeviceSilent",
+    "device": "pi-2",
+    "startsAt": "2026-11-23T03:33:50Z",
+    "receivedAt": "2026-11-23T03:33:55.366Z",
+    "filename": "2026-11-23T03-33-55-366Z_pi-2.ogg",
+    "delivered": "file",
+    "path": "/alerts_out/2026-11-23T03-33-55-366Z_pi-2.ogg",
+    "telegram": "not configured (TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID empty): saved to alerts_out instead",
+    "savedAt": "2026-11-23T03:33:55.873Z"
+  },
+  "ogg": {
+    "path": "examples/alerts/pi-2_offline_alert.ogg",
+    "ffprobe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "opus",
+          "sample_rate": "48000"
+        }
+      ],
+      "format": {
+        "duration": "2.915500"
+      }
+    },
+    "whisper_transcript_of_voice_note": "Alert, pi 2 has been offline for two minutes."
+  },
+  "total_seconds_chaos_to_voice_note": 138.1
+}

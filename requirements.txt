@@ -1,0 +1,12 @@
+# voice app (Docker image + local runs)
+pipecat-ai[webrtc,silero]==1.17.0
+faster-whisper==1.2.1
+piper-tts==1.8.0
+fastapi==0.165.0
+uvicorn[standard]==0.54.0
+python-multipart==0.0.34
+httpx==0.28.1
+anthropic==2.12.0
+numpy==2.4.6
+soundfile==0.13.1
+loguru==0.7.3
