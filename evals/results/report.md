@@ -13,6 +13,21 @@ File: `evals/results/voice_claude_cli.jsonl`
 
 Key-fact re-scored with the current checker: 2 verdict(s) differ from the run-time score (run-time answer-correct, all 35: 32/35).
 
+### Voice run: offline rules router (no LLM)
+
+File: `evals/results/voice_rules.jsonl`
+
+| Group | n | WER | CER | Lang ID | Tool choice | Tool + args | Answer correct | V2V p50 | V2V p95 | STT p50 | LLM p50 | TTS first p50 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| English | 10 | 0.000 | 0.000 | 100% | 100% | 100% | 100% | 4.54 s | 5.49 s | 4.09 s | 0.00 s | 0.48 s |
+| Hindi | 10 | 0.338 | 0.117 | 100% | 90% | 90% | 90% | 5.23 s | 6.55 s | 4.86 s | 0.00 s | 0.53 s |
+| Marathi | 10 | 0.603 | 0.236 | 80% | 80% | 80% | 80% | 5.17 s | 6.32 s | 4.58 s | 0.00 s | 0.59 s |
+| **All clean (30)** | 30 | 0.282 | 0.109 | 93% | 90% | 90% | 90% | 5.11 s | 6.55 s | 4.47 s | 0.00 s | 0.54 s |
+| Noisy variants (5) | 5 | 0.367 | 0.129 | 100% | 100% | 100% | 100% | 4.84 s | 5.34 s | 4.17 s | 0.00 s | 0.66 s |
+| All (35) | 35 | 0.292 | 0.111 | 94% | 91% | 91% | 91% | 5.09 s | 6.52 s | 4.45 s | 0.00 s | 0.55 s |
+
+Key-fact re-scored with the current checker: 0 verdict(s) differ from the run-time score (run-time answer-correct, all 35: 32/35).
+
 ### Text-only (oracle transcripts = the script), Claude via CLI
 
 File: `evals/results/text_claude_cli.jsonl`

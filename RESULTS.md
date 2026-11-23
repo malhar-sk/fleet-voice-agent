@@ -95,6 +95,24 @@ After seeing this table, I added fuzzy keyword matching to the router (Whisper w
 "अप्लाइ"). Re-run on the **same** transcripts (`--tag transcripts_rules_fuzzy`), it gets 90 % tool choice and 90 %
 answers correct. That number is **optimistic**, because the change was made after looking at this eval set.
 
+## Docker default config (no API key): voice run with the rules router, inside the container
+
+This is what the app does out of the box without `ANTHROPIC_API_KEY`: the rules router with fuzzy matching, run inside
+the `voice-app` image (`cpus: 1.0`, 1 STT thread). Run 04:14–04:20 UTC. Command:
+`docker compose stop voice-app && docker compose run --rm voice-app python -m evals.run_eval` (backend auto → rules).
+File: `evals/results/voice_rules.jsonl`. The Whisper transcripts were identical to the host run (same WER).
+
+| Group | n | Lang ID | Tool choice | Answer correct | V2V p50 | V2V p95 | STT p50 | TTS first p50 |
+|---|---|---|---|---|---|---|---|---|
+| English | 10 | 100% | 100% | 100% | 4.54 s | 5.49 s | 4.09 s | 0.48 s |
+| Hindi | 10 | 100% | 90% | 90% | 5.23 s | 6.55 s | 4.86 s | 0.53 s |
+| Marathi | 10 | 80% | 80% | 80% | 5.17 s | 6.32 s | 4.58 s | 0.59 s |
+| **All clean (30)** | 30 | 93% | 90% | 90% | 5.11 s | 6.55 s | 4.47 s | 0.54 s |
+| Noisy variants (5) | 5 | 100% | 100% | 100% | 4.84 s | 5.34 s | 4.17 s | 0.66 s |
+
+This is faster, because there are no LLM calls, but the accuracy is **optimistic**: the fuzzy matching was added after
+looking at this eval set's transcripts (see the previous section; before it, the rules router got 77 %).
+
 ## Voice-to-voice over WebRTC (client-measured)
 
 `scripts/webrtc_client.py` is an aiortc client that does what the browser does. It sends a WAV in real time over
@@ -135,6 +153,8 @@ Command: `python -m scripts.alert_timeline --device pi-2` (03:31:37Z start). Rec
 
 Transcribing the voice note back with Whisper gives "Alert, pi 2 has been offline for two minutes."
 Sample: `examples/alerts/pi-2_offline_alert.ogg`.
+The SLA rule takes the same path. With 3 breaches injected by the eval scenario, `PaymentSLABreaches` fired and n8n
+saved "Alert: 3 payment SLA breaches in the last 5 minutes." (`examples/alerts/sla_breaches_alert.ogg`, 04:04:15Z).
 **Telegram delivery: NOT MEASURED.** `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` are empty on the build host, so the
 workflow took its "not configured" branch, saved the `.ogg` and logged it to `alerts_out/alerts.log`. The Telegram
 branch (`sendVoice`, multipart) is built but has never run.

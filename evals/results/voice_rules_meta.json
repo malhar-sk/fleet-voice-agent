@@ -1,0 +1,20 @@
+{
+  "tag": "voice_rules",
+  "mode": "voice",
+  "backend": "rules",
+  "model": "keyword-router",
+  "n": 35,
+  "scenario": {
+    "offline": [
+      "pi-3"
+    ],
+    "breaches_injected": 3,
+    "set_at": "2026-11-23T04:14:25Z"
+  },
+  "finished": "2026-11-23T04:17:34Z",
+  "command": "python -m evals.run_eval ",
+  "stt": {
+    "model": "faster-whisper small int8",
+    "threads": 1
+  }
+}

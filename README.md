@@ -54,6 +54,7 @@ Measured on a shared 2 vCPU VPS, CPU only, with STT on 1 thread. Full tables, co
 | Hindi STT word error rate (10 clips) | **0.338** (CER 0.117) |
 | Answer contains the key fact (30 questions) | 96.7 % |
 | `make chaos` → voice note saved | **138 s** (threshold is 120 s of silence) |
+| No API key (Docker default, rules router): p50 voice-to-voice / tool choice | 5.1 s / 90 % (optimistic, see RESULTS) |
 
 Where the 8 s goes: STT about 4.0 s (one Whisper encoder pass on one CPU thread), LLM about 3.6 s (two `claude -p` calls,
 since the build host has no API key), TTS first sentence about 0.23 s.

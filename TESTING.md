@@ -105,23 +105,25 @@ docker compose exec fleet-sim python -m fleet_sim.chaos recover all
 
 ### 4. Eval: the latency and accuracy table
 
-Run it inside the app container (nothing to install on Windows):
+Run it in a one-off copy of the app container (nothing to install on Windows). Stop the running app first: two copies
+of the speech models don't fit in one container's memory limit.
 ```powershell
-docker compose exec voice-app python -m evals.make_audio
-docker compose exec voice-app python -m evals.run_eval
-docker compose exec voice-app python -m evals.report
+docker compose stop voice-app
+docker compose run --rm voice-app python -m evals.run_eval
+docker compose run --rm voice-app python -m evals.report
+docker compose start voice-app
 ```
-- `make_audio` should print `eval audio already present …`. The 45 synthetic clips (30 questions, 5 noisy variants,
-  10 dev clips) are committed, because Piper isn't deterministic and these are the exact clips behind RESULTS.md.
-  `--force` regenerates them.
 - `run_eval` first sets the scenario: random flapping off, pi-3 forced offline, 3 SLA breaches. It **waits about 2½ min**
   until pi-3 counts as OFFLINE, then prints one line per question, like
   `[1/35] en01 lang en✓ tool ✓ fact ✓ wer 0.0 v2v … | 'Which devices are offline right now?' -> '…'`.
   Expect about 5–10 min in total. With an API key it uses Claude (`voice_anthropic`); without one, the rules router
-  (`voice_rules`).
+  (`voice_rules`). On the build host the no-key run gave about 5.1 s p50 voice-to-voice and 90 % tool choice.
 - `report` prints markdown tables per language: WER, CER, language-ID accuracy, tool-choice accuracy, answer
   correctness, voice-to-voice p50/p95 and per-stage timings. The committed results from the build host (Claude via CLI)
   are in `evals/results/voice_claude_cli.jsonl` and are summarised in `RESULTS.md`.
+- The eval leaves pi-3 offline and random flapping off. To reset:
+  `docker compose exec fleet-sim python -m fleet_sim.chaos recover all` and
+  `docker compose exec fleet-sim python -m fleet_sim.chaos random on`.
 
 ### 5. Unit tests (no Docker, no models)
 
