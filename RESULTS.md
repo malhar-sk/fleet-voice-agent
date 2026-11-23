@@ -98,7 +98,7 @@ answers correct. That number is **optimistic**, because the change was made afte
 ## Docker default config (no API key): voice run with the rules router, inside the container
 
 This is what the app does out of the box without `ANTHROPIC_API_KEY`: the rules router with fuzzy matching, run inside
-the `voice-app` image (`cpus: 1.0`, 1 STT thread). Run 04:14–04:20 UTC. Command:
+the `voice-app` image (`cpus: 1.0`, 1 STT thread). Run 04:14–04:18 UTC (scenario set 04:14:25Z, last question 04:17:34Z). Command:
 `docker compose stop voice-app && docker compose run --rm voice-app python -m evals.run_eval` (backend auto → rules).
 File: `evals/results/voice_rules.jsonl`. The Whisper transcripts were identical to the host run (same WER).
 
