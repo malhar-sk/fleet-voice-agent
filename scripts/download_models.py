@@ -15,6 +15,13 @@ VOICES = ["en/en_US/lessac/medium/en_US-lessac-medium", "en/en_US/amy/medium/en_
           "mr/mr_IN/google/medium/mr_IN-google-medium"]
 WHISPER = "https://huggingface.co/Systran/faster-whisper-small/resolve/main/"
 WHISPER_FILES = ["config.json", "model.bin", "tokenizer.json", "vocabulary.txt"]
+# --extra (eval round 2, `make eval-stt` only; the app does not use them): both MIT licensed
+EXTRA = {
+    "whisper-medium": ("https://huggingface.co/Systran/faster-whisper-medium/resolve/main/",
+                       ["config.json", "tokenizer.json", "vocabulary.txt", "model.bin"]),
+    "whisper-large-v3-turbo": ("https://huggingface.co/deepdml/faster-whisper-large-v3-turbo-ct2/resolve/main/",
+                               ["config.json", "preprocessor_config.json", "tokenizer.json", "vocabulary.json", "model.bin"]),
+}
 
 
 def fetch(url, dest):
@@ -34,6 +41,10 @@ def main():
         fetch(PIPER + v + ".onnx.json", os.path.join(ROOT, "piper", name + ".onnx.json"))
     for f in WHISPER_FILES:
         fetch(WHISPER + f, os.path.join(ROOT, "whisper-small", f))
+    if "--extra" in sys.argv:
+        for name, (base, files) in EXTRA.items():
+            for f in files:
+                fetch(base + f, os.path.join(ROOT, name, f))
     print("models ready in", ROOT)
 
 

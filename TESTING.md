@@ -125,6 +125,30 @@ docker compose start voice-app
   `docker compose exec fleet-sim python -m fleet_sim.chaos recover all` and
   `docker compose exec fleet-sim python -m fleet_sim.chaos random on`.
 
+### 4b. Eval round 2 (optional): language-ID matrix, noise sweep, Marathi STT comparison
+
+The language-ID matrix is built from logged results only, so it needs no models and no Docker stack:
+```powershell
+docker compose run --rm --no-deps voice-app python -m evals.lang_confusion
+```
+You should see two 3×3 tables per run file. The app-policy table shows `accuracy 93.3% (28/30)`, with
+`| mr | 0 | 2 | 8 | 80% |`. With the committed noise-sweep rows, it also prints one table per noise condition.
+
+Noise sweep (STT on 210 clips with 1 thread, about 17 min; rules router only, no LLM, no stack needed):
+```powershell
+docker compose run --rm --no-deps voice-app python -m evals.noise_sweep
+```
+Its output goes to `evals/results/noise_sweep/report_rules_only.md` (the committed Claude run is not touched). It reuses the committed STT cache (`evals/results/noise_sweep/stt.jsonl`) when the regenerated noisy clips match the
+committed sha256s, so it can finish in seconds. It prints a table per noise type, SNR and language. The `clean` /
+`**All**` row reads WER 0.282 and rules tool choice 90 %. Adding `--claude` also scores Claude on the 10 dB sets.
+That needs a logged-in `claude` CLI on the host, so run it on the host, not in Docker.
+
+Marathi STT comparison (host only; downloads about 3.1 GB of extra models and needs about 1.7 GB of free RAM per model):
+```bash
+make models-extra && make eval-stt
+```
+You should see a table of WER, CER and seconds per clip for small / medium / large-v3-turbo (round 2: 0.603 / 0.508 / 0.540).
+
 ### 5. Unit tests (no Docker, no models)
 
 ```powershell
@@ -132,7 +156,7 @@ python -m venv .venv
 .venv\Scripts\pip install -r requirements-ci.txt
 .venv\Scripts\python -m pytest -q tests -m "not live and not models"
 ```
-You should see `66 passed, 5 deselected`. If Node.js isn't installed, the 3 n8n Code-node tests are skipped instead.
+You should see `76 passed, 5 deselected`. If Node.js isn't installed, the 3 n8n Code-node tests are skipped instead.
 
 Live tests (they start VictoriaMetrics + fleet-sim and force pi-4 offline, about 1–2 min):
 ```powershell
@@ -161,6 +185,7 @@ make test-live
 python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt
 .venv/bin/python scripts/download_models.py
 make eval-audio && make eval    # LLM backend: auto = API key, else `claude` CLI if logged in, else rules
+make eval-noise eval-stt eval-langid   # eval round 2 (see RESULTS.md)
 make examples                   # scripted end-to-end run over 6 clips -> examples/offline/
 ```
 

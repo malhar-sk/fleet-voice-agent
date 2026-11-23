@@ -5,7 +5,7 @@ DEVICE ?= pi-3
 MINUTES ?= 10
 COMPOSE ?= docker compose
 
-.PHONY: help up down ps logs chaos recover freeze unfreeze breaches test test-live eval eval-audio examples examples-webrtc alert-timeline models dashboard
+.PHONY: help up down ps logs chaos recover freeze unfreeze breaches test test-live eval eval-noise eval-stt eval-langid eval-audio examples examples-webrtc alert-timeline models dashboard
 
 help:
 	@grep -E '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  %-12s %s\n", $$1, $$2}'
@@ -50,6 +50,15 @@ eval: ## Voice eval (30 questions + 5 noisy) -> evals/results + RESULTS table
 	$(PY) -m evals.run_eval
 	$(PY) -m evals.report
 
+eval-noise: ## Round 2: noise sweep (white + babble/fan at 20/10/5 dB): WER + tool choice (rules; Claude on 10 dB)
+	$(PY) -m evals.noise_sweep --claude
+
+eval-stt: ## Round 2: Whisper small vs medium vs large-v3-turbo on Marathi (needs `make models-extra`)
+	$(PY) -m evals.compare_stt --model whisper-small whisper-medium whisper-large-v3-turbo --langs mr
+
+eval-langid: ## Round 2: en/hi/mr language-ID confusion matrices from logged runs
+	$(PY) -m evals.lang_confusion
+
 eval-audio: ## (Re)generate the synthetic question audio
 	$(PY) -m evals.make_audio
 
@@ -64,3 +73,6 @@ alert-timeline: ## make chaos -> Grafana -> n8n -> voice note, with timings
 
 models: ## Download Whisper small + Piper voices into ./models (~780 MB)
 	$(PY) scripts/download_models.py
+
+models-extra: ## Round 2 only: Whisper medium + large-v3-turbo (CTranslate2) for `make eval-stt` (~3.1 GB)
+	$(PY) scripts/download_models.py --extra

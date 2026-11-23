@@ -14,3 +14,4 @@ alerts_out/*
 n8n_data/
 *.egg-info/
 .DS_Store
+evals/audio/noise_sweep/

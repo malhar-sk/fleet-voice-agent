@@ -56,6 +56,14 @@ Measured on a shared 2 vCPU VPS, CPU only, with STT on 1 thread. Full tables, co
 | `make chaos` → voice note saved | **138 s** (threshold is 120 s of silence) |
 | No API key (Docker default, rules router): p50 voice-to-voice / tool choice | 5.1 s / 90 % (optimistic, see RESULTS) |
 
+**Eval round 2** (noise, Marathi STT, language ID; details in [RESULTS.md](RESULTS.md#eval-round-2-2026-11-23-noise-sweep-marathi-stt-comparison-language-id)):
+
+| | |
+|---|---|
+| Tool choice with noise at 10 dB SNR (Whisper-small → Claude, 30 clips) | 87 % white / 90 % babble+fan (clean 97 %) |
+| Marathi WER: Whisper-medium vs small (10 clips, 1 CPU thread) | 0.508 vs 0.603, but 12.7 s vs 4.4 s per clip, so the default stays **small** |
+| Language ID en/hi/mr, clean (30 clips) | 93.3 %; every miss is Marathi → Hindi |
+
 Where the 8 s goes: STT about 4.0 s (one Whisper encoder pass on one CPU thread), LLM about 3.6 s (two `claude -p` calls,
 since the build host has no API key), TTS first sentence about 0.23 s.
 
@@ -148,7 +156,9 @@ make eval                         # the voice eval (needs the venv + models, see
   better privacy).
 - **Cut latency**: use the native API with streaming (no CLI start-up, start TTS on the first streamed sentence),
   use more STT threads or a GPU, and try an Indic-tuned ASR model (e.g. AI4Bharat IndicConformer) for Marathi,
-  where Whisper-small has 0.60 WER.
+  where Whisper-small has 0.60 WER (Whisper-medium gets 0.51, but is 3× slower on one thread; see RESULTS round 2).
+- **Noise robustness**: Marathi tool choice drops to 60–70 % at 10 dB SNR. Next would be a denoiser in front of
+  Whisper (e.g. RNNoise) and real noisy recordings.
 - **Barge-in**: stop TTS when the user starts speaking (Pipecat interruptions).
 - **Normalise device names** in answers ("पi 3" → "pi 3") before TTS. This was the one wrong answer on clean text.
 
