@@ -1,0 +1,10 @@
+# CI: no speech models, no pipecat, LLM mocked, metrics server faked
+fastapi==0.165.0
+python-multipart==0.0.34
+httpx==0.28.1
+pydantic>=2.10
+loguru==0.7.3
+numpy>=2.0
+jiwer==4.0.0
+pytest>=8
+pytest-asyncio

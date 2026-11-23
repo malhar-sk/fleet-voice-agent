@@ -1,0 +1,14 @@
+{
+  "tag": "transcripts_rules_fuzzy",
+  "mode": "transcripts",
+  "backend": "rules",
+  "model": "keyword-router",
+  "n": 30,
+  "scenario": null,
+  "finished": "2026-11-23T03:58:27Z",
+  "command": "python -m evals.run_eval --backend rules --mode transcripts --from evals/results/voice_claude_cli.jsonl --no-scenario --tag transcripts_rules_fuzzy",
+  "stt": {
+    "model": "faster-whisper small int8",
+    "threads": 1
+  }
+}

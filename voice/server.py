@@ -53,12 +53,16 @@ def get_tts():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from pipecat.transports.smallwebrtc.request_handler import SmallWebRTCRequestHandler
-    state["webrtc"] = SmallWebRTCRequestHandler()
+    try:
+        from pipecat.transports.smallwebrtc.request_handler import SmallWebRTCRequestHandler
+        state["webrtc"] = SmallWebRTCRequestHandler()
+    except ImportError as e:  # CI installs only the light dependencies
+        logger.warning(f"WebRTC disabled (pipecat not installed): {e}")
     if os.environ.get("PRELOAD", "1") == "1" and os.environ.get("TTS_ONLY") != "1":
         await asyncio.get_running_loop().run_in_executor(None, get_engine)
     yield
-    await state["webrtc"].close()
+    if "webrtc" in state:
+        await state["webrtc"].close()
 
 
 app = FastAPI(title="fleet-voice-agent", lifespan=lifespan)

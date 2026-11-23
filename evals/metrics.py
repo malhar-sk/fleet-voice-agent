@@ -18,7 +18,7 @@ NUM_WORDS = {
 }
 _DEV_DIGITS = str.maketrans("०१२३४५६७८९", "0123456789")
 # spellings Whisper / TTS use for the device prefix "pi"
-_PI = re.compile(r"\b(pi|pie|pai|py|पाई|पाय|पी|पई|पए|पै)\s*[-‐]?\s*(\d+)", re.IGNORECASE)
+_PI = re.compile(r"\b(pi|pie|pai|py|पाई|पाय|पी|पि|पई|पए|पै)\s*[-‐]?\s*(\d+)", re.IGNORECASE)
 
 
 def normalize(text: str) -> str:

@@ -5,7 +5,7 @@ models
 logs
 alerts_out
 state
-evals/audio
+evals/audio/*.wav
 examples
 n8n_data
 __pycache__

@@ -1,0 +1,14 @@
+{
+  "tag": "text_claude_cli",
+  "mode": "text",
+  "backend": "claude_cli",
+  "model": "claude-haiku-5-5",
+  "n": 30,
+  "scenario": null,
+  "finished": "2026-11-23T03:46:38Z",
+  "command": "python -m evals.run_eval --backend claude_cli --mode text --no-scenario",
+  "stt": {
+    "model": "faster-whisper small int8",
+    "threads": 1
+  }
+}

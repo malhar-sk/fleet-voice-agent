@@ -1,0 +1,70 @@
+{
+  "input": "evals/audio/en05.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 7325.4,
+  "turn": {
+    "type": "turn",
+    "transcript": "How is pi 3 doing?",
+    "lang": "en",
+    "answer": "Pi 3 is offline, having been silent for about 12 minutes. Its last reading showed a CPU temperature of about 50 degrees and memory use around 49 percent.",
+    "tool_calls": [
+      {
+        "tool": "device_status",
+        "args": {
+          "name": "pi-3"
+        }
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 3387.3,
+      "stt_detect_ms": 2998.8,
+      "stt_transcribe_ms": 388.5,
+      "llm_ms": 3363.6,
+      "llm_api_ms": 2453,
+      "tools_ms": 12.6,
+      "agent_ms": 3376.3,
+      "tts_first_ms": 281.7,
+      "tts_total_ms": 730.1,
+      "v2v_first_audio_ms": 7045.3,
+      "total_ms": 7493.7
+    }
+  },
+  "reply_audio": "evals/results/webrtc/en05.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "How is pi 3 doing?",
+      "lang": "en",
+      "answer": "Pi 3 is offline, having been silent for about 12 minutes. Its last reading showed a CPU temperature of about 50 degrees and memory use around 49 percent.",
+      "tool_calls": [
+        {
+          "tool": "device_status",
+          "args": {
+            "name": "pi-3"
+          }
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 3387.3,
+        "stt_detect_ms": 2998.8,
+        "stt_transcribe_ms": 388.5,
+        "llm_ms": 3363.6,
+        "llm_api_ms": 2453,
+        "tools_ms": 12.6,
+        "agent_ms": 3376.3,
+        "tts_first_ms": 281.7,
+        "tts_total_ms": 730.1,
+        "v2v_first_audio_ms": 7045.3,
+        "total_ms": 7493.7
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "input": "evals/audio/hi09.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 9691.7,
+  "turn": {
+    "type": "turn",
+    "transcript": "पिछले 10 मिनट में कितने पेमेंट एसएले उल्लंघन होए.",
+    "lang": "hi",
+    "answer": "पिछले 10 मिनट में पेमेंट एसएलए का कोई उल्लंघन नहीं हुआ है। इस दौरान 1207 संदेश भेजे गए, जिनमें से 1205 की पुष्टि हुई और अभी 1 संदेश कतार में है।",
+    "tool_calls": [
+      {
+        "tool": "sla_breaches",
+        "args": {
+          "minutes": 10
+        }
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 4825.4,
+      "stt_detect_ms": 3155.9,
+      "stt_transcribe_ms": 1669.4,
+      "llm_ms": 4264.9,
+      "llm_api_ms": 3295,
+      "tools_ms": 6.2,
+      "agent_ms": 4271.3,
+      "tts_first_ms": 261.0,
+      "tts_total_ms": 808.1,
+      "v2v_first_audio_ms": 9357.7,
+      "total_ms": 9904.8
+    }
+  },
+  "reply_audio": "evals/results/webrtc/hi09.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "पिछले 10 मिनट में कितने पेमेंट एसएले उल्लंघन होए.",
+      "lang": "hi",
+      "answer": "पिछले 10 मिनट में पेमेंट एसएलए का कोई उल्लंघन नहीं हुआ है। इस दौरान 1207 संदेश भेजे गए, जिनमें से 1205 की पुष्टि हुई और अभी 1 संदेश कतार में है।",
+      "tool_calls": [
+        {
+          "tool": "sla_breaches",
+          "args": {
+            "minutes": 10
+          }
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 4825.4,
+        "stt_detect_ms": 3155.9,
+        "stt_transcribe_ms": 1669.4,
+        "llm_ms": 4264.9,
+        "llm_api_ms": 3295,
+        "tools_ms": 6.2,
+        "agent_ms": 4271.3,
+        "tts_first_ms": 261.0,
+        "tts_total_ms": 808.1,
+        "v2v_first_audio_ms": 9357.7,
+        "total_ms": 9904.8
+      }
+    }
+  ]
+}

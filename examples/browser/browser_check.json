@@ -1,0 +1,17 @@
+{
+  "wav": "evals/audio/hi01.wav",
+  "url": "http://127.0.0.1:17860",
+  "webrtc": {
+    "ok": true,
+    "seconds_to_first_turn": 12.0,
+    "turn_text": "🗣️ [hi] आभी कोंसे दिवाईस अफलाइ है?\n🤖 5 में से 1 डिवाइस ऑफ़लाइन हैं: pi 3। pi 3 22 मिनट से बंद है।\ntools: list_offline_devices({}) · stt 6257.9 ms · llm 10.2 ms · tts(first) 439 ms · voice-to-voice 6764.2 ms",
+    "status": "live: speak any time"
+  },
+  "push_to_talk": {
+    "ok": true,
+    "turn_text": "🗣️ [hi] आभी कोंसे दिवाइस अफलाइ है?\n🤖 5 में से 1 डिवाइस ऑफ़लाइन हैं: pi 3। pi 3 23 मिनट से बंद है।\ntools: list_offline_devices({}) · stt 4884.5 ms · llm 0.5 ms · tts(first) 258.5 ms · voice-to-voice 5147.5 ms"
+  },
+  "console": [
+    "The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet)"
+  ]
+}

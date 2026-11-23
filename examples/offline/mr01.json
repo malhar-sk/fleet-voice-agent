@@ -1,0 +1,72 @@
+{
+  "input": "evals/audio/mr01.wav",
+  "input_is_synthetic_speech": true,
+  "transcript": "सद्धा कोंती उपकरने अप्लाइना आहेत.",
+  "lang": "mr",
+  "answer": "पi-3 उपकरण सुमारे 17 मिनिटांपासून बंद आहे.",
+  "stt": {
+    "text": "सद्धा कोंती उपकरने अप्लाइना आहेत.",
+    "lang": "mr",
+    "whisper_lang": "mr",
+    "lang_probs": {
+      "en": 0.1854,
+      "hi": 0.1075,
+      "mr": 0.0072
+    },
+    "detect_ms": 3122.9,
+    "transcribe_ms": 1312.6,
+    "total_ms": 4435.5,
+    "audio_s": 3.55
+  },
+  "agent": {
+    "question": "सद्धा कोंती उपकरने अप्लाइना आहेत.",
+    "lang": "mr",
+    "answer": "पi-3 उपकरण सुमारे 17 मिनिटांपासून बंद आहे.",
+    "tool_calls": [
+      {
+        "tool": "list_offline_devices",
+        "args": {},
+        "result": {
+          "total_devices": 5,
+          "offline_count": 1,
+          "offline": [
+            {
+              "device": "pi-3",
+              "silent_for_seconds": 1049,
+              "silent_for_minutes": 17.5
+            }
+          ],
+          "offline_after_seconds": 120
+        },
+        "ms": 3.0
+      }
+    ],
+    "llm_ms": 3040.7,
+    "tools_ms": 3.0,
+    "total_ms": 3043.7,
+    "backend": "claude_cli",
+    "model": "claude-haiku-5-5",
+    "llm_rounds": 2,
+    "cached": false,
+    "llm_api_ms": 2146
+  },
+  "tts": {
+    "chunks": 1,
+    "audio_s": 3.84,
+    "sample_rate": 22050
+  },
+  "timings_ms": {
+    "stt_ms": 4435.6,
+    "stt_detect_ms": 3122.9,
+    "stt_transcribe_ms": 1312.6,
+    "llm_ms": 3040.7,
+    "llm_api_ms": 2146,
+    "tools_ms": 3.0,
+    "agent_ms": 3043.8,
+    "tts_first_ms": 262.9,
+    "tts_total_ms": 262.9,
+    "v2v_first_audio_ms": 7742.3,
+    "total_ms": 7742.3
+  },
+  "reply_audio": "examples/offline/mr01.reply.wav"
+}

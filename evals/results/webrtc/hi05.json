@@ -1,0 +1,70 @@
+{
+  "input": "evals/audio/hi05.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 10943.4,
+  "turn": {
+    "type": "turn",
+    "transcript": "पाई 3 किस्थे तिक्या है?",
+    "lang": "hi",
+    "answer": "पाई 3 अभी ऑफलाइन है, और लगभग 13 मिनट से कोई संकेत नहीं मिला है। आख़िरी बार देखे जाने पर इसका CPU तापमान लगभग 50 डिग्री था।",
+    "tool_calls": [
+      {
+        "tool": "device_status",
+        "args": {
+          "name": "pi-3"
+        }
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 3950.8,
+      "stt_detect_ms": 3030.7,
+      "stt_transcribe_ms": 920.0,
+      "llm_ms": 5875.5,
+      "llm_api_ms": 4807,
+      "tools_ms": 12.1,
+      "agent_ms": 5887.8,
+      "tts_first_ms": 760.9,
+      "tts_total_ms": 1252.1,
+      "v2v_first_audio_ms": 10599.5,
+      "total_ms": 11090.6
+    }
+  },
+  "reply_audio": "evals/results/webrtc/hi05.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "पाई 3 किस्थे तिक्या है?",
+      "lang": "hi",
+      "answer": "पाई 3 अभी ऑफलाइन है, और लगभग 13 मिनट से कोई संकेत नहीं मिला है। आख़िरी बार देखे जाने पर इसका CPU तापमान लगभग 50 डिग्री था।",
+      "tool_calls": [
+        {
+          "tool": "device_status",
+          "args": {
+            "name": "pi-3"
+          }
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 3950.8,
+        "stt_detect_ms": 3030.7,
+        "stt_transcribe_ms": 920.0,
+        "llm_ms": 5875.5,
+        "llm_api_ms": 4807,
+        "tools_ms": 12.1,
+        "agent_ms": 5887.8,
+        "tts_first_ms": 760.9,
+        "tts_total_ms": 1252.1,
+        "v2v_first_audio_ms": 10599.5,
+        "total_ms": 11090.6
+      }
+    }
+  ]
+}

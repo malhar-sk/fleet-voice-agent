@@ -1,0 +1,70 @@
+{
+  "input": "evals/audio/mr09.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 9776.6,
+  "turn": {
+    "type": "turn",
+    "transcript": "गेल्या दाहमिंतात किती पेमेंट एसएले उल्लंगने जाली.",
+    "lang": "mr",
+    "answer": "दहा मिनिटांत एकही पेमेंट एसएलए उल्लंघन झालेले नाही. सध्या एक संदेश रांगेत आहे.",
+    "tool_calls": [
+      {
+        "tool": "sla_breaches",
+        "args": {
+          "minutes": 10
+        }
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 4830.4,
+      "stt_detect_ms": 3086.0,
+      "stt_transcribe_ms": 1744.3,
+      "llm_ms": 4077.4,
+      "llm_api_ms": 2989,
+      "tools_ms": 6.8,
+      "agent_ms": 4084.4,
+      "tts_first_ms": 307.7,
+      "tts_total_ms": 496.6,
+      "v2v_first_audio_ms": 9222.5,
+      "total_ms": 9411.3
+    }
+  },
+  "reply_audio": "evals/results/webrtc/mr09.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "गेल्या दाहमिंतात किती पेमेंट एसएले उल्लंगने जाली.",
+      "lang": "mr",
+      "answer": "दहा मिनिटांत एकही पेमेंट एसएलए उल्लंघन झालेले नाही. सध्या एक संदेश रांगेत आहे.",
+      "tool_calls": [
+        {
+          "tool": "sla_breaches",
+          "args": {
+            "minutes": 10
+          }
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 4830.4,
+        "stt_detect_ms": 3086.0,
+        "stt_transcribe_ms": 1744.3,
+        "llm_ms": 4077.4,
+        "llm_api_ms": 2989,
+        "tools_ms": 6.8,
+        "agent_ms": 4084.4,
+        "tts_first_ms": 307.7,
+        "tts_total_ms": 496.6,
+        "v2v_first_audio_ms": 9222.5,
+        "total_ms": 9411.3
+      }
+    }
+  ]
+}

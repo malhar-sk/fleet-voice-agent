@@ -1,0 +1,66 @@
+{
+  "input": "evals/audio/hi01.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 8654.5,
+  "turn": {
+    "type": "turn",
+    "transcript": "आभी कोंज़े दिवाईस अफलाइन है?",
+    "lang": "hi",
+    "answer": "पी-3 अभी अफलाइन है। वह लगभग 13 मिनट से शांत है।",
+    "tool_calls": [
+      {
+        "tool": "list_offline_devices",
+        "args": {}
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 4329.2,
+      "stt_detect_ms": 3108.1,
+      "stt_transcribe_ms": 1220.9,
+      "llm_ms": 3811.3,
+      "llm_api_ms": 2820,
+      "tools_ms": 3.8,
+      "agent_ms": 3815.2,
+      "tts_first_ms": 177.9,
+      "tts_total_ms": 382.3,
+      "v2v_first_audio_ms": 8322.4,
+      "total_ms": 8526.7
+    }
+  },
+  "reply_audio": "evals/results/webrtc/hi01.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "आभी कोंज़े दिवाईस अफलाइन है?",
+      "lang": "hi",
+      "answer": "पी-3 अभी अफलाइन है। वह लगभग 13 मिनट से शांत है।",
+      "tool_calls": [
+        {
+          "tool": "list_offline_devices",
+          "args": {}
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 4329.2,
+        "stt_detect_ms": 3108.1,
+        "stt_transcribe_ms": 1220.9,
+        "llm_ms": 3811.3,
+        "llm_api_ms": 2820,
+        "tools_ms": 3.8,
+        "agent_ms": 3815.2,
+        "tts_first_ms": 177.9,
+        "tts_total_ms": 382.3,
+        "v2v_first_audio_ms": 8322.4,
+        "total_ms": 8526.7
+      }
+    }
+  ]
+}

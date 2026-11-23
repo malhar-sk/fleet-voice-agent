@@ -1,0 +1,72 @@
+{
+  "input": "evals/audio/en01.wav",
+  "input_is_synthetic_speech": true,
+  "transcript": "Which devices are offline right now?",
+  "lang": "en",
+  "answer": "Pi 3 is the only device offline right now, silent for about 17 minutes.",
+  "stt": {
+    "text": "Which devices are offline right now?",
+    "lang": "en",
+    "whisper_lang": "en",
+    "lang_probs": {
+      "en": 0.9969,
+      "hi": 0.0001,
+      "mr": 0.0
+    },
+    "detect_ms": 3569.1,
+    "transcribe_ms": 514.9,
+    "total_ms": 4084.0,
+    "audio_s": 3.42
+  },
+  "agent": {
+    "question": "Which devices are offline right now?",
+    "lang": "en",
+    "answer": "Pi 3 is the only device offline right now, silent for about 17 minutes.",
+    "tool_calls": [
+      {
+        "tool": "list_offline_devices",
+        "args": {},
+        "result": {
+          "total_devices": 5,
+          "offline_count": 1,
+          "offline": [
+            {
+              "device": "pi-3",
+              "silent_for_seconds": 1014,
+              "silent_for_minutes": 16.9
+            }
+          ],
+          "offline_after_seconds": 120
+        },
+        "ms": 55.9
+      }
+    ],
+    "llm_ms": 4150.2,
+    "tools_ms": 55.9,
+    "total_ms": 4206.2,
+    "backend": "claude_cli",
+    "model": "claude-haiku-5-5",
+    "llm_rounds": 2,
+    "cached": false,
+    "llm_api_ms": 3184
+  },
+  "tts": {
+    "chunks": 1,
+    "audio_s": 4.91,
+    "sample_rate": 22050
+  },
+  "timings_ms": {
+    "stt_ms": 4084.0,
+    "stt_detect_ms": 3569.1,
+    "stt_transcribe_ms": 514.9,
+    "llm_ms": 4150.2,
+    "llm_api_ms": 3184,
+    "tools_ms": 55.9,
+    "agent_ms": 4206.4,
+    "tts_first_ms": 349.0,
+    "tts_total_ms": 349.0,
+    "v2v_first_audio_ms": 8639.4,
+    "total_ms": 8639.4
+  },
+  "reply_audio": "examples/offline/en01.reply.wav"
+}

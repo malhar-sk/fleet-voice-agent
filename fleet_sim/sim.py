@@ -159,7 +159,8 @@ def main() -> None:
     rng = random.Random(int(SEED)) if SEED else random.Random()
     devices = [Device(d, rng) for d in DEVICES]
     feed = PaymentFeed(rng)
-    consumed_injections = 0
+    # injections are a running total in the chaos file; only new ones count after a (re)start
+    consumed_injections = int(read_chaos().get("inject_breaches", 0))
     running = True
 
     def stop(*_):

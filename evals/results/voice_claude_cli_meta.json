@@ -1,0 +1,20 @@
+{
+  "tag": "voice_claude_cli",
+  "mode": "voice",
+  "backend": "claude_cli",
+  "model": "claude-haiku-5-5",
+  "n": 35,
+  "scenario": {
+    "offline": [
+      "pi-3"
+    ],
+    "breaches_injected": 3,
+    "set_at": "2026-11-23T03:38:54Z"
+  },
+  "finished": "2026-11-23T03:43:50Z",
+  "command": "python -m evals.run_eval --backend claude_cli",
+  "stt": {
+    "model": "faster-whisper small int8",
+    "threads": 1
+  }
+}

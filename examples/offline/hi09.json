@@ -1,0 +1,69 @@
+{
+  "input": "evals/audio/hi09.wav",
+  "input_is_synthetic_speech": true,
+  "transcript": "पिछले 10 मिनट में कितने पेमेंट एसएलए उललंगन होए.",
+  "lang": "hi",
+  "answer": "पिछले 10 मिनट में कोई पेमेंट एसएलए उल्लंघन नहीं हुआ। कुल 1184 संदेश भेजे गए, जिनमें से 1182 की पुष्टि हुई, और कतार में अभी 4 संदेश हैं।",
+  "stt": {
+    "text": "पिछले 10 मिनट में कितने पेमेंट एसएलए उललंगन होए.",
+    "lang": "hi",
+    "whisper_lang": "mr",
+    "lang_probs": {
+      "en": 0.0003,
+      "hi": 0.9873,
+      "mr": 0.0015
+    },
+    "detect_ms": 3030.0,
+    "transcribe_ms": 1675.3,
+    "total_ms": 4705.3,
+    "audio_s": 5.27
+  },
+  "agent": {
+    "question": "पिछले 10 मिनट में कितने पेमेंट एसएलए उललंगन होए.",
+    "lang": "hi",
+    "answer": "पिछले 10 मिनट में कोई पेमेंट एसएलए उल्लंघन नहीं हुआ। कुल 1184 संदेश भेजे गए, जिनमें से 1182 की पुष्टि हुई, और कतार में अभी 4 संदेश हैं।",
+    "tool_calls": [
+      {
+        "tool": "sla_breaches",
+        "args": {
+          "minutes": 10
+        },
+        "result": {
+          "minutes": 10,
+          "sla_breaches": 0,
+          "messages_sent": 1184,
+          "messages_acked": 1182,
+          "queue_depth": 4
+        },
+        "ms": 5.0
+      }
+    ],
+    "llm_ms": 3492.9,
+    "tools_ms": 5.0,
+    "total_ms": 3497.9,
+    "backend": "claude_cli",
+    "model": "claude-haiku-5-5",
+    "llm_rounds": 2,
+    "cached": false,
+    "llm_api_ms": 2573
+  },
+  "tts": {
+    "chunks": 2,
+    "audio_s": 12.14,
+    "sample_rate": 22050
+  },
+  "timings_ms": {
+    "stt_ms": 4705.4,
+    "stt_detect_ms": 3030.0,
+    "stt_transcribe_ms": 1675.3,
+    "llm_ms": 3492.9,
+    "llm_api_ms": 2573,
+    "tools_ms": 5.0,
+    "agent_ms": 3498.0,
+    "tts_first_ms": 164.8,
+    "tts_total_ms": 597.4,
+    "v2v_first_audio_ms": 8368.2,
+    "total_ms": 8800.8
+  },
+  "reply_audio": "examples/offline/hi09.reply.wav"
+}

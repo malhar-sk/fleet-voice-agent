@@ -1,0 +1,71 @@
+{
+  "input": "evals/audio/mr05.wav",
+  "input_is_synthetic_speech": true,
+  "transcript": "पाई 3 चिस तिती का आहे.",
+  "lang": "mr",
+  "answer": "पाई 3 सध्या ऑफलाइन आहे, कारण ती सुमारे 18 मिनिटांपासून शांत आहे. ती ऑफलाइन असल्यामुळे तिचे तापमान किंवा इतर माहिती आता उपलब्ध नाही.",
+  "stt": {
+    "text": "पाई 3 चिस तिती का आहे.",
+    "lang": "mr",
+    "whisper_lang": "mr",
+    "lang_probs": {
+      "en": 0.0959,
+      "hi": 0.4399,
+      "mr": 0.0009
+    },
+    "detect_ms": 3035.3,
+    "transcribe_ms": 978.0,
+    "total_ms": 4013.3,
+    "audio_s": 2.85
+  },
+  "agent": {
+    "question": "पाई 3 चिस तिती का आहे.",
+    "lang": "mr",
+    "answer": "पाई 3 सध्या ऑफलाइन आहे, कारण ती सुमारे 18 मिनिटांपासून शांत आहे. ती ऑफलाइन असल्यामुळे तिचे तापमान किंवा इतर माहिती आता उपलब्ध नाही.",
+    "tool_calls": [
+      {
+        "tool": "device_status",
+        "args": {
+          "name": "pi-3"
+        },
+        "result": {
+          "device": "pi-3",
+          "status": "OFFLINE",
+          "last_seen_seconds_ago": 1058,
+          "cpu_temperature_c": 49.5,
+          "memory_percent": 49.3,
+          "cpu_percent": 12.7,
+          "uptime_seconds": null
+        },
+        "ms": 6.2
+      }
+    ],
+    "llm_ms": 5435.8,
+    "tools_ms": 6.2,
+    "total_ms": 5442.0,
+    "backend": "claude_cli",
+    "model": "claude-haiku-5-5",
+    "llm_rounds": 2,
+    "cached": false,
+    "llm_api_ms": 4561
+  },
+  "tts": {
+    "chunks": 2,
+    "audio_s": 9.89,
+    "sample_rate": 22050
+  },
+  "timings_ms": {
+    "stt_ms": 4013.3,
+    "stt_detect_ms": 3035.3,
+    "stt_transcribe_ms": 978.0,
+    "llm_ms": 5435.8,
+    "llm_api_ms": 4561,
+    "tools_ms": 6.2,
+    "agent_ms": 5442.1,
+    "tts_first_ms": 252.1,
+    "tts_total_ms": 479.4,
+    "v2v_first_audio_ms": 9707.5,
+    "total_ms": 9934.8
+  },
+  "reply_audio": "examples/offline/mr05.reply.wav"
+}

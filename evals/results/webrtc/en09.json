@@ -1,0 +1,70 @@
+{
+  "input": "evals/audio/en09.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 7565.5,
+  "turn": {
+    "type": "turn",
+    "transcript": "How many payment SLA breaches were there in the last 10 minutes?",
+    "lang": "en",
+    "answer": "There were no payment SLA breaches in the last 10 minutes. The gateway handled 1218 messages, with 1216 acknowledged and a queue depth of 1.",
+    "tool_calls": [
+      {
+        "tool": "sla_breaches",
+        "args": {
+          "minutes": 10
+        }
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 3916.7,
+      "stt_detect_ms": 3257.9,
+      "stt_transcribe_ms": 658.8,
+      "llm_ms": 3106.9,
+      "llm_api_ms": 2093,
+      "tools_ms": 6.4,
+      "agent_ms": 3113.4,
+      "tts_first_ms": 198.9,
+      "tts_total_ms": 674.9,
+      "v2v_first_audio_ms": 7229.0,
+      "total_ms": 7705.0
+    }
+  },
+  "reply_audio": "evals/results/webrtc/en09.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "How many payment SLA breaches were there in the last 10 minutes?",
+      "lang": "en",
+      "answer": "There were no payment SLA breaches in the last 10 minutes. The gateway handled 1218 messages, with 1216 acknowledged and a queue depth of 1.",
+      "tool_calls": [
+        {
+          "tool": "sla_breaches",
+          "args": {
+            "minutes": 10
+          }
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 3916.7,
+        "stt_detect_ms": 3257.9,
+        "stt_transcribe_ms": 658.8,
+        "llm_ms": 3106.9,
+        "llm_api_ms": 2093,
+        "tools_ms": 6.4,
+        "agent_ms": 3113.4,
+        "tts_first_ms": 198.9,
+        "tts_total_ms": 674.9,
+        "v2v_first_audio_ms": 7229.0,
+        "total_ms": 7705.0
+      }
+    }
+  ]
+}

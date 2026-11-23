@@ -28,9 +28,21 @@ _DEVICE_RE = re.compile(r"(?:pi|पाई|पी|पाय|device|डिवा�
 _MINUTES_RE = re.compile(r"([0-9०-९]+)\s*(?:min|minutes|mins|मिनट|मिनिट|मिनिटां|मिनिटे|मिनिटांत)", re.IGNORECASE)
 
 
+FUZZY_MIN = 0.72
+
+
+def _fuzzy_token_match(text: str, words) -> bool:
+    """Whisper often misspells loanwords in Devanagari (ऑफ़लाइन -> अफलाइ / अप्लाइ). Compare tokens of 4+
+    characters against single-word keywords with a similarity ratio instead of exact substrings."""
+    from difflib import SequenceMatcher
+    toks = [t for t in re.findall(r"[\u0900-\u097F]{4,}", text.replace("\u093c", ""))]
+    keys = [w.replace("\u093c", "") for w in words if " " not in w and re.search(r"[\u0900-\u097F]", w) and len(w) >= 4]
+    return any(SequenceMatcher(None, t, k).ratio() >= FUZZY_MIN for t in toks for k in keys)
+
+
 def _has(text: str, words) -> bool:
     t = text.lower()
-    return any(w in t for w in words)
+    return any(w in t for w in words) or _fuzzy_token_match(text, words)
 
 
 def find_device(text: str) -> str | None:

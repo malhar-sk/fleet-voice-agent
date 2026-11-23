@@ -1,0 +1,23 @@
+# Move this file to .github/workflows/ci.yml to enable it (see BLOCKED.md: the build host's token
+# could not push workflow files).
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install light dependencies (no speech models, no pipecat)
+        run: pip install -r requirements-ci.txt
+      - name: Unit tests (fake VictoriaMetrics server, mocked LLM)
+        run: python -m pytest -q tests -m "not live and not models"
+      - name: Compose file is valid
+        run: docker compose config -q

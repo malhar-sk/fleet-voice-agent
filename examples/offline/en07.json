@@ -1,0 +1,71 @@
+{
+  "input": "evals/audio/en07.wav",
+  "input_is_synthetic_speech": true,
+  "transcript": "What is the temperature of pi 2?",
+  "lang": "en",
+  "answer": "Pi 2 is about 48 degrees Celsius and is online.",
+  "stt": {
+    "text": "What is the temperature of pi 2?",
+    "lang": "en",
+    "whisper_lang": "en",
+    "lang_probs": {
+      "en": 0.9889,
+      "hi": 0.0,
+      "mr": 0.0
+    },
+    "detect_ms": 3070.7,
+    "transcribe_ms": 487.6,
+    "total_ms": 3558.3,
+    "audio_s": 3.05
+  },
+  "agent": {
+    "question": "What is the temperature of pi 2?",
+    "lang": "en",
+    "answer": "Pi 2 is about 48 degrees Celsius and is online.",
+    "tool_calls": [
+      {
+        "tool": "device_status",
+        "args": {
+          "name": "pi-2"
+        },
+        "result": {
+          "device": "pi-2",
+          "status": "ONLINE",
+          "last_seen_seconds_ago": 2,
+          "cpu_temperature_c": 48.4,
+          "memory_percent": 44.1,
+          "cpu_percent": 21.9,
+          "uptime_seconds": 1164
+        },
+        "ms": 9.7
+      }
+    ],
+    "llm_ms": 3965.3,
+    "tools_ms": 9.7,
+    "total_ms": 3975.0,
+    "backend": "claude_cli",
+    "model": "claude-haiku-5-5",
+    "llm_rounds": 2,
+    "cached": false,
+    "llm_api_ms": 3111
+  },
+  "tts": {
+    "chunks": 1,
+    "audio_s": 3.38,
+    "sample_rate": 22050
+  },
+  "timings_ms": {
+    "stt_ms": 3558.4,
+    "stt_detect_ms": 3070.7,
+    "stt_transcribe_ms": 487.6,
+    "llm_ms": 3965.3,
+    "llm_api_ms": 3111,
+    "tools_ms": 9.7,
+    "agent_ms": 3975.1,
+    "tts_first_ms": 198.2,
+    "tts_total_ms": 198.2,
+    "v2v_first_audio_ms": 7731.7,
+    "total_ms": 7731.7
+  },
+  "reply_audio": "examples/offline/en07.reply.wav"
+}

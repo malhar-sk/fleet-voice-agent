@@ -103,10 +103,13 @@ services:
       OMP_NUM_THREADS: "1"
       STT_THREADS: ${STT_THREADS:-1}
       MODELS_DIR: /app/models
+      CHAOS_FILE: /state/chaos.json             # lets `docker compose exec voice-app python -m evals.run_eval` drive the sim
     ports:
       - "${BIND_ADDR:-127.0.0.1}:${APP_PORT:-17860}:7860"
     volumes:
       - ./models:/app/models
+      - ./state:/state
+      - ./evals:/app/evals
     mem_limit: 1700m
     cpus: "1.0"
     healthcheck:

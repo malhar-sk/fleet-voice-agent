@@ -1,0 +1,66 @@
+{
+  "input": "evals/audio/mr01.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 8781.4,
+  "turn": {
+    "type": "turn",
+    "transcript": "सद्धा कोंती उपकरने अप्लाइ आहेत.",
+    "lang": "mr",
+    "answer": "मराठीत उत्तर: सध्या पाच पैकी चार उपकरने अप्लाइ आहेत. पाच उपकरने एकूण आहेत आणि pi 3 ऑफलाइन आहे.",
+    "tool_calls": [
+      {
+        "tool": "list_devices",
+        "args": {}
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 4479.9,
+      "stt_detect_ms": 3150.7,
+      "stt_transcribe_ms": 1329.1,
+      "llm_ms": 3392.4,
+      "llm_api_ms": 2394,
+      "tools_ms": 9.2,
+      "agent_ms": 3401.7,
+      "tts_first_ms": 371.9,
+      "tts_total_ms": 637.5,
+      "v2v_first_audio_ms": 8253.5,
+      "total_ms": 8519.2
+    }
+  },
+  "reply_audio": "evals/results/webrtc/mr01.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "सद्धा कोंती उपकरने अप्लाइ आहेत.",
+      "lang": "mr",
+      "answer": "मराठीत उत्तर: सध्या पाच पैकी चार उपकरने अप्लाइ आहेत. पाच उपकरने एकूण आहेत आणि pi 3 ऑफलाइन आहे.",
+      "tool_calls": [
+        {
+          "tool": "list_devices",
+          "args": {}
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 4479.9,
+        "stt_detect_ms": 3150.7,
+        "stt_transcribe_ms": 1329.1,
+        "llm_ms": 3392.4,
+        "llm_api_ms": 2394,
+        "tools_ms": 9.2,
+        "agent_ms": 3401.7,
+        "tts_first_ms": 371.9,
+        "tts_total_ms": 637.5,
+        "v2v_first_audio_ms": 8253.5,
+        "total_ms": 8519.2
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "input": "evals/audio/mr05.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 9601.0,
+  "turn": {
+    "type": "turn",
+    "transcript": "पाई 3 चिस टिटी का आहे.",
+    "lang": "mr",
+    "answer": "पाई 3 सध्या ऑफलाइन आहे, कारण ती सुमारे 14 मिनिटांपासून शांत आहे. तिचे शेवटचे तापमान सुमारे 50 अंश सेल्सिअस होते.",
+    "tool_calls": [
+      {
+        "tool": "device_status",
+        "args": {
+          "name": "pi-3"
+        }
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 4060.2,
+      "stt_detect_ms": 3073.8,
+      "stt_transcribe_ms": 986.3,
+      "llm_ms": 4630.7,
+      "llm_api_ms": 3686,
+      "tools_ms": 9.7,
+      "agent_ms": 4640.5,
+      "tts_first_ms": 395.0,
+      "tts_total_ms": 709.7,
+      "v2v_first_audio_ms": 9095.8,
+      "total_ms": 9410.4
+    }
+  },
+  "reply_audio": "evals/results/webrtc/mr05.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "पाई 3 चिस टिटी का आहे.",
+      "lang": "mr",
+      "answer": "पाई 3 सध्या ऑफलाइन आहे, कारण ती सुमारे 14 मिनिटांपासून शांत आहे. तिचे शेवटचे तापमान सुमारे 50 अंश सेल्सिअस होते.",
+      "tool_calls": [
+        {
+          "tool": "device_status",
+          "args": {
+            "name": "pi-3"
+          }
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 4060.2,
+        "stt_detect_ms": 3073.8,
+        "stt_transcribe_ms": 986.3,
+        "llm_ms": 4630.7,
+        "llm_api_ms": 3686,
+        "tools_ms": 9.7,
+        "agent_ms": 4640.5,
+        "tts_first_ms": 395.0,
+        "tts_total_ms": 709.7,
+        "v2v_first_audio_ms": 9095.8,
+        "total_ms": 9410.4
+      }
+    }
+  ]
+}

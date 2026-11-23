@@ -1,0 +1,66 @@
+{
+  "input": "evals/audio/en01.wav",
+  "transport": "WebRTC (Pipecat SmallWebRTCTransport, aiortc client)",
+  "client_v2v_ms": 8461.1,
+  "turn": {
+    "type": "turn",
+    "transcript": "Which devices are offline right now?",
+    "lang": "en",
+    "answer": "Pi 3 is the only device offline right now, having been silent for about 12 minutes. The other four devices are online.",
+    "tool_calls": [
+      {
+        "tool": "list_offline_devices",
+        "args": {}
+      }
+    ],
+    "backend": "claude_cli",
+    "timings_ms": {
+      "stt_ms": 3952.0,
+      "stt_detect_ms": 3503.9,
+      "stt_transcribe_ms": 448.0,
+      "llm_ms": 3781.1,
+      "llm_api_ms": 2781,
+      "tools_ms": 30.9,
+      "agent_ms": 3812.3,
+      "tts_first_ms": 396.1,
+      "tts_total_ms": 560.5,
+      "v2v_first_audio_ms": 8160.4,
+      "total_ms": 8324.7
+    }
+  },
+  "reply_audio": "evals/results/webrtc/en01.reply.wav",
+  "messages": [
+    {
+      "type": "listening"
+    },
+    {
+      "type": "thinking"
+    },
+    {
+      "type": "turn",
+      "transcript": "Which devices are offline right now?",
+      "lang": "en",
+      "answer": "Pi 3 is the only device offline right now, having been silent for about 12 minutes. The other four devices are online.",
+      "tool_calls": [
+        {
+          "tool": "list_offline_devices",
+          "args": {}
+        }
+      ],
+      "backend": "claude_cli",
+      "timings_ms": {
+        "stt_ms": 3952.0,
+        "stt_detect_ms": 3503.9,
+        "stt_transcribe_ms": 448.0,
+        "llm_ms": 3781.1,
+        "llm_api_ms": 2781,
+        "tools_ms": 30.9,
+        "agent_ms": 3812.3,
+        "tts_first_ms": 396.1,
+        "tts_total_ms": 560.5,
+        "v2v_first_audio_ms": 8160.4,
+        "total_ms": 8324.7
+      }
+    }
+  ]
+}
