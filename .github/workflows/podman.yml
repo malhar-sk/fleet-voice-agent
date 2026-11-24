@@ -69,6 +69,10 @@ jobs:
         id: alert
         continue-on-error: true
         run: |
+          echo "--- can n8n write the voice-note folder?"
+          podman-compose exec -T n8n sh -c 'id; ls -ld /alerts_out; touch /alerts_out/.probe && echo WRITABLE || echo NOT_WRITABLE'
+          echo "--- can Grafana reach n8n?"
+          podman-compose exec -T grafana sh -c 'wget -qO- http://n8n:5678/healthz && echo REACHABLE || echo UNREACHABLE'
           t0=$(date +%s)
           podman-compose exec -T fleet-sim python -m fleet_sim.chaos offline pi-3 --minutes 25
           for i in $(seq 1 120); do
