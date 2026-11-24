@@ -1,0 +1,89 @@
+name: podman-compat
+
+# Checks that the same docker-compose.yml runs under rootless Podman (podman-compose),
+# with no Docker involved. Manual only, so it doesn't add load to every push.
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/podman.yml"]
+
+jobs:
+  podman:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Versions
+        run: |
+          podman version
+          pip install --user podman-compose==1.3.0
+          podman-compose version
+      - name: Configure (offline rules backend, no API key)
+        run: |
+          cp .env.example .env
+          echo "LLM_BACKEND=rules" >> .env
+      - name: Build and start (rootless Podman)
+        run: podman-compose up -d --build
+      - name: VictoriaMetrics, Grafana and n8n are up
+        run: |
+          ok() { for i in $(seq 1 60); do curl -fsS "$1" >/dev/null && echo "up: $1" && return 0; sleep 5; done; echo "DOWN: $1"; return 1; }
+          ok http://127.0.0.1:18428/health
+          ok http://127.0.0.1:13000/api/health
+          ok http://127.0.0.1:15678/healthz
+      - name: Voice app is up (first start downloads ~780 MB of models)
+        run: |
+          for i in $(seq 1 180); do
+            curl -fsS http://127.0.0.1:17860/health && exit 0
+            sleep 5
+          done
+          podman-compose logs --tail 60 voice-app; exit 1
+      - name: Text question picks the right tool
+        run: |
+          sleep 20   # let fleet-sim push a few samples
+          curl -fsS -XPOST http://127.0.0.1:17860/api/ask -H 'Content-Type: application/json' \
+               -d '{"question":"Which devices are offline?","lang":"en"}' | tee ask.json
+          grep -q '"list_offline_devices"' ask.json
+      - name: Push-to-talk voice turn (WAV in, transcript + tool + spoken reply out)
+        run: |
+          curl -fsS -XPOST http://127.0.0.1:17860/api/turn -F "audio=@evals/audio/en01.wav" > turn.json
+          python3 - <<'EOF'
+          import json
+          d = json.load(open("turn.json"))
+          print({k: d.get(k) for k in ("transcript", "lang", "tools")})
+          assert d.get("transcript"), "empty transcript"
+          assert d.get("audio_wav_b64"), "no spoken reply"
+          EOF
+      - name: Text-to-speech endpoint returns OGG audio
+        run: |
+          curl -fsS -XPOST http://127.0.0.1:17860/tts -H 'Content-Type: application/json' \
+               -d '{"text":"Device pi-3 is offline.","lang":"en","format":"ogg"}' -o out.ogg
+          head -c 4 out.ogg | grep -q OggS && ls -l out.ogg
+      - name: Live WebRTC from outside the containers (the rootless-networking risk)
+        id: webrtc
+        continue-on-error: true
+        run: |
+          pip install --user aiortc httpx numpy
+          timeout 180 python3 -m scripts.webrtc_client evals/audio/en01.wav --url http://127.0.0.1:17860 --out webrtc_out
+          ls -l webrtc_out
+      - name: Alert path (chaos -> Grafana -> n8n -> voice note)
+        id: alert
+        continue-on-error: true
+        run: |
+          podman-compose exec -T fleet-sim python -m fleet_sim.chaos offline pi-3 --minutes 10
+          for i in $(seq 1 60); do
+            ls alerts_out/*.ogg >/dev/null 2>&1 && ls -l alerts_out && exit 0
+            sleep 10
+          done
+          echo "no voice note within 10 min"; exit 1
+      - name: Summary
+        if: always()
+        run: |
+          echo "webrtc=${{ steps.webrtc.outcome }} alert_path=${{ steps.alert.outcome }}" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Diagnostics
+        if: always()
+        run: |
+          podman-compose ps || true
+          podman-compose logs --tail 30 || true
+      - name: Tear down
+        if: always()
+        run: podman-compose down -v || true
