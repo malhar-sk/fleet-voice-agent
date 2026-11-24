@@ -46,7 +46,7 @@ flowchart LR
 
 Runs with **Docker** (Docker Desktop on Windows/macOS, Docker Engine on Linux) using `docker compose up -d`.
 The Compose file sticks to the standard Compose spec, so other Compose-compatible tools (Podman, OrbStack,
-Rancher Desktop, Colima) can run it too. Should work with Podman (standard Compose spec) but is not tested yet.
+Rancher Desktop, Colima) can run it too. Tested end to end with rootless Podman 4.9.3 + podman-compose 1.3.0, including live WebRTC and the alert voice note (see `.github/workflows/podman.yml`).
 Why Docker and not the others: [docs/adr/0001-container-runtime.md](docs/adr/0001-container-runtime.md).
 
 ## Results

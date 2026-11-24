@@ -26,7 +26,9 @@ Keep **Docker** as the documented default, and treat the **Compose file as the c
 
 ## Podman compatibility
 
-**Not tested yet.** The compose file uses only the standard Compose spec, so it should run under `podman-compose`, but that has not been verified for this repo. The voice app needs a UDP port range for WebRTC, which rootless Podman networking can make harder; that is the part most likely to need changes.
+**Tested.** On 2026-11-24 the unchanged `docker-compose.yml` ran under rootless Podman 4.9.3 with podman-compose 1.3.0 on GitHub Actions (Ubuntu 24.04, no Docker). Everything passed: VictoriaMetrics, Grafana, n8n and the voice app became healthy; a text question picked the right tool; a push-to-talk WAV turn returned a transcript and a spoken reply; `/tts` returned OGG audio; a live WebRTC call from outside the containers worked; and the full alert path (chaos → Grafana → n8n → voice note) delivered a voice note 131 s after the fault ([run](https://github.com/malhar-sk/fleet-voice-agent/actions/runs/45333420138)).
+
+The Podman test found one real bug that also affected Docker on Linux: n8n runs as a non-root user and could not write to `./alerts_out` on a fresh clone. The one-shot `alerts-init` service now makes that folder writable at startup. (n8n deliberately does not `depends_on` it: podman-compose 1.3.0 waits forever on an exited one-shot dependency.) Re-run the check any time from Actions → **podman-compat**.
 
 ## Consequences
 
