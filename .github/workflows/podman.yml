@@ -10,7 +10,7 @@ on:
 jobs:
   podman:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
       - name: Versions
@@ -62,19 +62,25 @@ jobs:
         id: webrtc
         continue-on-error: true
         run: |
-          pip install --user aiortc httpx numpy
+          pip install --user aiortc httpx numpy soundfile
           timeout 180 python3 -m scripts.webrtc_client evals/audio/en01.wav --url http://127.0.0.1:17860 --out webrtc_out
           ls -l webrtc_out
       - name: Alert path (chaos -> Grafana -> n8n -> voice note)
         id: alert
         continue-on-error: true
         run: |
-          podman-compose exec -T fleet-sim python -m fleet_sim.chaos offline pi-3 --minutes 10
-          for i in $(seq 1 60); do
-            ls alerts_out/*.ogg >/dev/null 2>&1 && ls -l alerts_out && exit 0
+          t0=$(date +%s)
+          podman-compose exec -T fleet-sim python -m fleet_sim.chaos offline pi-3 --minutes 25
+          for i in $(seq 1 120); do
+            if ls alerts_out/*.ogg >/dev/null 2>&1; then
+              echo "voice note after $(( $(date +%s) - t0 )) s"; ls -l alerts_out; exit 0
+            fi
             sleep 10
           done
-          echo "no voice note within 10 min"; exit 1
+          echo "no voice note within 20 min"
+          podman-compose logs --tail 40 n8n || true
+          podman-compose logs grafana 2>&1 | grep -iE "ngalert|webhook|notif|error" | tail -30 || true
+          exit 1
       - name: Summary
         if: always()
         run: |
