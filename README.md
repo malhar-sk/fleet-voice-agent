@@ -42,6 +42,13 @@ flowchart LR
   N8N -->|"no token"| OUT["alerts_out/*.ogg + alerts.log"]
 ```
 
+## Container runtime
+
+Runs with **Docker** (Docker Desktop on Windows/macOS, Docker Engine on Linux) using `docker compose up -d`.
+The Compose file sticks to the standard Compose spec, so other Compose-compatible tools (Podman, OrbStack,
+Rancher Desktop, Colima) can run it too. Should work with Podman (standard Compose spec) but is not tested yet.
+Why Docker and not the others: [docs/adr/0001-container-runtime.md](docs/adr/0001-container-runtime.md).
+
 ## Results
 
 Measured on a shared 2 vCPU VPS, CPU only, with STT on 1 thread. Full tables, commands and caveats are in **[RESULTS.md](RESULTS.md)**.

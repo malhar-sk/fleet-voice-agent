@@ -4,6 +4,11 @@ Copy-paste steps for a **Windows laptop with Docker Desktop, Git and Python**. C
 Each step says what you should see. Linux/macOS users can run the same `docker compose` commands, or use the
 `make` targets shown at the end.
 
+> **Which container tool?** These steps use Docker: Docker Desktop on Windows or macOS, or Docker Engine
+> on Linux. With **Podman**, install `podman-compose` and replace `docker compose` with `podman-compose`
+> (and `docker` with `podman`). OrbStack on macOS works with the commands as written.
+> Details: `docs/adr/0001-container-runtime.md`.
+
 Default ports (high on purpose, because the build server is shared; you can change them in `.env`):
 
 | What | URL |
