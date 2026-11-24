@@ -61,9 +61,20 @@ services:
     mem_limit: 64m
     cpus: "0.25"
 
+  alerts-init:
+    # One-shot: makes ./alerts_out writable for n8n, which runs as a non-root user.
+    # Needed on Linux (fresh clones) and under rootless Podman; harmless on Docker Desktop.
+    image: busybox:1.36
+    command: ["sh", "-c", "chmod 0777 /alerts_out"]
+    volumes:
+      - ./alerts_out:/alerts_out
+    restart: "no"
+    mem_limit: 16m
+
   n8n:
     image: n8nio/n8n:1.123.99
     restart: unless-stopped
+    depends_on: [alerts-init]
     entrypoint: ["/bin/sh", "/start.sh"]
     environment:
       N8N_PORT: 5678

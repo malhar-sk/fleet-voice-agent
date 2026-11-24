@@ -46,7 +46,7 @@ docker compose ps
 The first run builds the app image (about 5–10 min), then the `voice-app` container downloads about 780 MB of speech
 models into `.\models` (Whisper small + 5 Piper voices). Follow it with `docker compose logs -f voice-app` until you see
 `models ready` and `voice engine ready` (Ctrl+C to stop following). `docker compose ps` should list
-`victoriametrics`, `grafana`, `fleet-sim`, `n8n` and `voice-app` as Up, with voice-app **(healthy)**. If the download
+`victoriametrics`, `grafana`, `fleet-sim`, `n8n` and `voice-app` as Up, with voice-app **(healthy)**. (`alerts-init` shows as Exited (0): it is a one-shot step that makes `alerts_out` writable.) If the download
 took longer than the healthcheck allows, voice-app may show "unhealthy" even though it works. Check with
 `curl.exe http://localhost:17860/health`, which should return `{"status":"ok",...}`.
 
