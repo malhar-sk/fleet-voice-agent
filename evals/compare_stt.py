@@ -12,7 +12,7 @@ record two decodes:
 Seconds per clip = wall time of WhisperSTT.transcribe (language ID + decode) after one warm-up clip.
 
 Memory guard: the child refuses to load a model if MemAvailable < 1 GB + the model file size, and a
-watchdog stops it if MemAvailable drops under 1 GB while running (written to BLOCKED.md by the parent).
+watchdog stops it if MemAvailable drops under 1 GB while running (noted in logs/compare_stt_low_memory.md by the parent).
 Results: evals/results/stt_compare/<model>.jsonl (+ report.md); a model/clip/settings result is reused
 if it is already there.
 """
@@ -145,12 +145,12 @@ def main():
         p = subprocess.run([sys.executable, "-m", "evals.compare_stt", "--child", "--model", m, "--langs", *a.langs],
                            cwd=ROOT, env={**os.environ, "OMP_NUM_THREADS": "1", "STT_THREADS": "1"})
         if p.returncode == 3:
-            with open(os.path.join(ROOT, "BLOCKED.md"), "a", encoding="utf-8") as fh:
+            with open(os.path.join(ROOT, "logs", "compare_stt_low_memory.md"), "a", encoding="utf-8") as fh:
                 fh.write(f"\n## STT comparison: {m} stopped for low memory ({time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())})\n\n"
                          f"- MemAvailable fell under {MIN_FREE_MB} MB (shared server), so `python -m evals.compare_stt "
                          f"--model {m}` was stopped. Partial rows are in `evals/results/stt_compare/{m}.jsonl`.\n"
                          f"- Next step: re-run that command when the server has more free memory (results are cached).\n")
-            print(f"{m}: stopped for low memory, noted in BLOCKED.md")
+            print(f"{m}: stopped for low memory, noted in logs/compare_stt_low_memory.md")
         elif p.returncode:
             print(f"{m}: failed with exit code {p.returncode}")
     table = report()

@@ -1,5 +1,3 @@
-# Move this file to .github/workflows/ci.yml to enable it (see BLOCKED.md: the build host's token
-# could not push workflow files).
 name: ci
 on:
   push:

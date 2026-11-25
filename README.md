@@ -1,5 +1,9 @@
 # fleet-voice-agent
 
+[![ci](https://github.com/malhar-sk/fleet-voice-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/malhar-sk/fleet-voice-agent/actions/workflows/ci.yml)
+[![podman-compat](https://github.com/malhar-sk/fleet-voice-agent/actions/workflows/podman.yml/badge.svg)](https://github.com/malhar-sk/fleet-voice-agent/actions/workflows/podman.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 **Talk to your device fleet in English, Hindi or Marathi.** This is a voice agent with tool calling over a
 VictoriaMetrics/Grafana stack. It also sends voice alerts through n8n.
 
@@ -154,6 +158,20 @@ make eval                         # the voice eval (needs the venv + models, see
   IndicTTS licence, `en_US-lessac` uses the Blizzard 2013 licence (research use) and `en_US-amy` comes from Mycroft
   mimic3-voices. **Check these before any commercial use.**
 
+## Limitations
+
+- **Simulated fleet and synthetic speech.** The five devices and the payment-SLA feed are generated, and every eval
+  clip is synthetic speech, so the accuracy numbers describe this setup, not real-world audio.
+- **Not verified here:** Telegram voice notes (no bot token on the build host; the "save to `alerts_out/`" branch is
+  the one that ran), the Anthropic API backend (unit-tested with a fake client; measured numbers used the `claude -p`
+  CLI), and browser WebRTC on Windows / Docker Desktop (checked with headless Chromium and an aiortc client on Linux).
+- **No authentication**, so keep it on a private network.
+
+## Related projects
+
+- [supplywatch-copilot](https://github.com/malhar-sk/supplywatch-copilot): RAG copilot, LangGraph agent and MCP server over a supply-risk API
+- [mt103-extractor-lora](https://github.com/malhar-sk/mt103-extractor-lora): LoRA fine-tuned 0.5B model that turns messy payment text into MT103 JSON
+
 ## What I'd do next
 
 - **Phone calls**: put the same pipeline behind a SIP provider or Twilio Media Streams (Pipecat has transports for
@@ -169,7 +187,3 @@ make eval                         # the voice eval (needs the venv + models, see
 - **Barge-in**: stop TTS when the user starts speaking (Pipecat interruptions).
 - **Normalise device names** in answers ("पi 3" → "pi 3") before TTS. This was the one wrong answer on clean text.
 
-## Resume line
-
-> Multilingual (en/hi/mr) voice agent over an observability stack: Pipecat + faster-whisper + tool-calling LLM,
-> p50 voice-to-voice 8.0 s on a 2-vCPU CPU-only box, tool accuracy 96.7 %; Grafana → n8n → Telegram voice alerts.
