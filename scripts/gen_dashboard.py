@@ -1,6 +1,6 @@
 """Generate grafana/dashboards/fleet.json (run: python scripts/gen_dashboard.py).
 
-Queries follow the icu-observability-stack contract: a device is OFFLINE when the age of its last
+Queries follow the fleet-health-monitor contract: a device is OFFLINE when the age of its last
 device_uptime_seconds sample exceeds 120 s (the "device silent > 2 min" rule used everywhere here).
 """
 import json, pathlib

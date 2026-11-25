@@ -1,4 +1,4 @@
-# Grafana-managed alert rules (adapted from icu-observability-stack's DeviceOffline rule and
+# Grafana-managed alert rules (adapted from fleet-health-monitor's DeviceOffline rule and
 # swift-mt103-monitor's "swift.sla.breaches > 0" alert).
 apiVersion: 1
 groups:

@@ -5,7 +5,7 @@ ALL DATA IS SYNTHETIC. Nothing here talks to real hardware.
 Every PUSH_INTERVAL seconds the simulator writes Prometheus text-format samples to
 VictoriaMetrics' /api/v1/import/prometheus endpoint (no timestamp = "now").
 
-Device metrics reuse the names from the icu-observability-stack contract
+Device metrics reuse the names from the fleet-health-monitor contract
 (device_uptime_seconds is the liveness metric; a silent device pushes nothing):
   device_cpu_utilization_percent, device_memory_utilization_percent,
   device_temperature_celsius, device_uptime_seconds,

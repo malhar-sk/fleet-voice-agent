@@ -1,7 +1,7 @@
 """Fleet tools: PromQL/MetricsQL over VictoriaMetrics' HTTP API.
 
 These are the only things the LLM can call. Each returns a small JSON-serialisable dict that is
-easy to speak in two sentences. Offline semantics follow the icu-observability-stack contract,
+easy to speak in two sentences. Offline semantics follow the fleet-health-monitor contract,
 with a fixed 2-minute limit: a device is OFFLINE when its last `device_uptime_seconds` sample is
 more than SILENT_AFTER_S (120 s) old.
 """
