@@ -109,5 +109,7 @@ instead. The app was not changed to make any test pass.
 - Global setup (fleet into a known state) took 135 s in every run: pi-3 has to cross the 120 s line.
 - Each voice journey took 12–15 s end to end (browser launch, WebRTC connect, speech, Whisper on 1 CPU, reply).
 - English, Hindi and Marathi journeys gave the right language and named pi 3 in runs 2, 3 and 4 (3 of 3).
-- The CI workflow has not run yet: the branch is not pushed. Whether the 2-minute alert check stays inside its
-  window on a GitHub runner is therefore **not measured**.
+- **GitHub Actions** (2026-11-27, [run 46023701490](https://github.com/malhar-sk/fleet-voice-agent/actions/runs/46023701490)):
+  **18 passed in 8.5 min** (the whole job took 11 min, including bringing the stack up). The observability tests
+  passed, so the 2-minute alert check stayed inside its window on a GitHub runner too; the exact firing time there
+  was not recorded.
