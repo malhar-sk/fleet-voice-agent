@@ -86,7 +86,7 @@ test.describe.serial(`make chaos ${DEVICE} → Grafana`, () => {
     await expect(table.getByRole("row", { name: new RegExp(`^${DEVICE} OFFLINE`) })).toBeVisible({ timeout: 60_000 });
     // pi-3 (global setup) and pi-4 (this file) are both silent for > 2 min
     await expect(page.getByRole("region", { name: "Devices OFFLINE (silent > 2 min)" })).toContainText(/\b2\b/);
-    await page.screenshot({ path: test.info().outputPath("dashboard.png"), fullPage: true });
+    await test.info().attach("dashboard", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
   });
 
   test("the alerting UI lists DeviceSilent as Firing", async ({ page }) => {
@@ -95,6 +95,6 @@ test.describe.serial(`make chaos ${DEVICE} → Grafana`, () => {
     await page.goto(`${GRAFANA}/alerting/list?search=DeviceSilent`, { waitUntil: "commit", timeout: 60_000 });
     const rule = page.getByRole("treeitem", { name: "DeviceSilent" });
     await expect(rule.getByRole("img", { name: "Firing" })).toBeVisible({ timeout: 60_000 });
-    await page.screenshot({ path: test.info().outputPath("alert-list.png"), fullPage: true });
+    await test.info().attach("alert-list", { body: await page.screenshot({ fullPage: true }), contentType: "image/png" });
   });
 });

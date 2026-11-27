@@ -9,6 +9,9 @@
 import { expect } from "@playwright/test";
 import { APP_URL, DEVICES, SILENT_AFTER_S, fleet, secondsSilent, waitForAppHealthy } from "./fleet";
 import { makeSilence } from "../scripts/prepare-audio";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 
 export default async function globalSetup() {
   makeSilence();
@@ -34,4 +37,17 @@ export default async function globalSetup() {
     }, { timeout: 240_000, intervals: [5_000], message: "pi-3 offline (>130 s silent) and pi-1,2,4,5 online" })
     .toBe(true);
   console.log(`[global-setup] fleet ready in ${((Date.now() - t0) / 1000).toFixed(0)} s: pi-3 offline, others online, random flapping off`);
+
+  // Facts about this run, for e2e/report/RUN_REPORT.md (scripts/make-report.mjs). Written under .cache because
+  // Playwright empties test-results/ when the run starts.
+  const e2e = path.resolve(__dirname, "..");
+  const pw = JSON.parse(fs.readFileSync(path.join(e2e, "node_modules/@playwright/test/package.json"), "utf8")).version;
+  fs.mkdirSync(path.join(e2e, ".cache"), { recursive: true });
+  fs.writeFileSync(path.join(e2e, ".cache", "run-env.json"), JSON.stringify({
+    llm_backend: health.llm_backend,
+    host: `${os.cpus().length} CPU, ${Math.round(os.totalmem() / 2 ** 30)} GB RAM, ${os.platform()} ${os.release()}${process.env.CI ? " (CI)" : ""}`,
+    playwright: pw,
+    node: process.version,
+    fleet: `pi-3 forced offline and silent > 130 s after ${((Date.now() - t0) / 1000).toFixed(0)} s of setup; pi-1, 2, 4, 5 online; random flapping off`,
+  }, null, 1));
 }
