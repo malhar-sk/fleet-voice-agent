@@ -128,5 +128,6 @@ instead. The app was not changed to make any test pass.
 - Global setup (fleet into a known state) took 135 s in every run: pi-3 has to cross the 120 s line.
 - Each voice journey took 12–15 s end to end (browser launch, WebRTC connect, speech, Whisper on 1 CPU, reply).
 - English, Hindi and Marathi journeys gave the right language and named pi 3 in runs 2, 3 and 4 (3 of 3).
-- The CI workflow has not run yet: the branch is not pushed. Whether the 2-minute alert check stays inside its
-  window on a GitHub runner is therefore **not measured**.
+- **CI (GitHub Actions, fresh ubuntu-24.04 runner):** [run 46025704701](https://github.com/malhar-sk/fleet-voice-agent/actions/runs/46025704701)
+  passed **18/18 in 8.1 min**; DeviceSilent fired **126 s** after `make chaos`, inside the rule window. The run page shows
+  the report summary, and the full report and HTML report are attached as artifacts.
