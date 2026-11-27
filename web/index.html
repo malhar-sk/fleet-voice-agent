@@ -27,16 +27,16 @@
 <p class="sub">Ask about the simulated device fleet in English, हिंदी or मराठी. Try “Which devices are offline?” or “अभी कौन से डिवाइस ऑफ़लाइन हैं?”</p>
 
 <div class="row">
-  <button id="talk" class="primary">🎙️ Talk (live, WebRTC)</button>
-  <button id="ptt">Hold to talk (fallback)</button>
-  <span id="status">idle</span>
+  <button id="talk" class="primary" data-testid="talk-button">🎙️ Talk (live, WebRTC)</button>
+  <button id="ptt" data-testid="ptt-button">Hold to talk (fallback)</button>
+  <span id="status" data-testid="status" role="status" aria-live="polite">idle</span>
 </div>
 <p class="note">Live mode streams your mic over WebRTC to a Pipecat pipeline (VAD → Whisper → LLM + tools → Piper).
 If it connects but you hear nothing (WebRTC media can't cross an SSH tunnel or Docker Desktop's NAT), use
 <b>Hold to talk</b>: it records while you hold the button and sends the clip over plain HTTP.
 The browser needs microphone permission (Chrome on <code>localhost</code> is fine). Demonstration only, synthetic data.</p>
 
-<div id="log"></div>
+<div id="log" data-testid="turn-log"></div>
 <audio id="remote" autoplay></audio>
 
 <script>
@@ -49,11 +49,14 @@ function esc(s) { return (s || "").replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt
 function addTurn(t) {
   const d = document.createElement("div");
   d.className = "turn";
+  d.dataset.testid = "turn";
+  d.dataset.lang = t.lang || "";
+  d.dataset.tools = JSON.stringify((t.tool_calls || (t.agent && t.agent.tool_calls) || []).map(c => c.tool));
   const tools = (t.tool_calls || (t.agent && t.agent.tool_calls) || []).map(c => `${c.tool}(${JSON.stringify(c.args)})`).join(", ");
   const tm = t.timings_ms || {};
-  d.innerHTML = `<div class="you">🗣️ [${esc(t.lang)}] ${esc(t.transcript) || "<i>(nothing heard)</i>"}</div>
-    <div class="bot">🤖 ${esc(t.answer)}</div>
-    <div class="meta">tools: ${esc(tools) || "none"} · stt ${tm.stt_ms ?? "-"} ms · llm ${tm.llm_ms ?? "-"} ms · tts(first) ${tm.tts_first_ms ?? "-"} ms · voice-to-voice ${tm.v2v_first_audio_ms ?? "-"} ms</div>`;
+  d.innerHTML = `<div class="you">🗣️ [<span data-testid="turn-lang">${esc(t.lang)}</span>] <span data-testid="turn-transcript">${esc(t.transcript) || "<i>(nothing heard)</i>"}</span></div>
+    <div class="bot">🤖 <span data-testid="turn-answer">${esc(t.answer)}</span></div>
+    <div class="meta" data-testid="turn-meta">tools: ${esc(tools) || "none"} · stt ${tm.stt_ms ?? "-"} ms · llm ${tm.llm_ms ?? "-"} ms · tts(first) ${tm.tts_first_ms ?? "-"} ms · voice-to-voice ${tm.v2v_first_audio_ms ?? "-"} ms</div>`;
   $("log").prepend(d);
 }
 
