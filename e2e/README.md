@@ -7,6 +7,24 @@ tests check what a user would see. A separate set drives Grafana through `make c
 The suite needs **no Anthropic API key**: it runs against the offline rules router (`LLM_BACKEND=rules`), so
 anyone can reproduce it. These tests were written with [Claude Code](https://claude.com/claude-code).
 
+## Check it without running it
+
+You do not need to run the stack to see what the suite did:
+
+- **[report/RUN_REPORT.md](report/RUN_REPORT.md)**: the latest recorded run, generated from Playwright's own output
+  (`scripts/make-report.mjs`). For every voice turn it shows what the app heard, the language it detected, its
+  reply, the tool it called and the timings, with a screenshot of the page; for Grafana, the measured alert time and
+  screenshots of the dashboard and alert list; for each known defect, the error and a screenshot. It also records
+  the commit it ran against, the machine and the backend. `report/summary.json` has the same data for scripts.
+- **CI runs** of the `e2e-playwright` workflow show the same summary table on the run page, and attach the
+  Markdown report, the full Playwright HTML report and, on failure, traces you can open with
+  `npx playwright show-trace`.
+- **[DEFECTS.md](DEFECTS.md)**: each defect with steps, expected/actual and evidence.
+
+The report is regenerated after every run (`run-in-docker.sh` and CI do it automatically; locally:
+`npm run report:md`). The committed one is only refreshed when someone commits a new run, so check its commit hash
+against the code you are looking at.
+
 ## How to run
 
 ```bash
@@ -104,7 +122,8 @@ instead. The app was not changed to make any test pass.
 | 1 | 16 failed | 5.6 min | 137 s | A harness bug (manual `tracing.start` clashed with Playwright's own tracing), fixed; the Grafana UI test exposed DEF-001 |
 | 2 | 14 passed, 3 failed | 9.0 min | 132 s | Exposed DEF-002 and DEF-003; Grafana UI passed on a freshly recreated Grafana |
 | 3 | 17 passed, 1 failed | 9.1 min | 132 s | The one failure was a `test.fail()` for DEF-001 that unexpectedly passed, which showed DEF-001 is intermittent |
-| 4 (final, committed code) | **18 passed** (16 passing + 2 expected failures, DEF-002 and DEF-003) | **9.0 min** | **132 s** | |
+| 4 | **18 passed** (16 passing + 2 expected failures, DEF-002 and DEF-003) | **9.0 min** | **132 s** | |
+| 5 (report run) | **18 passed** (16 + 2 expected failures) | **9.1 min** | **132 s** | Recorded every turn and screenshot: [report/RUN_REPORT.md](report/RUN_REPORT.md) |
 
 - Global setup (fleet into a known state) took 135 s in every run: pi-3 has to cross the 120 s line.
 - Each voice journey took 12–15 s end to end (browser launch, WebRTC connect, speech, Whisper on 1 CPU, reply).

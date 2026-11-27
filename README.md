@@ -133,6 +133,14 @@ make eval                         # the voice eval (needs the venv + models, see
 
 [TESTING.md](TESTING.md) has step-by-step instructions for a Windows laptop.
 
+## End-to-end tests
+
+A Playwright suite in [`e2e/`](e2e/README.md) plays synthetic speech into a real Chromium as the microphone and
+checks the voice journeys in English, Hindi and Marathi, edge cases (silence, noise, off-topic questions, backend
+down) and the `make chaos` → Grafana alert path, with no API key. The latest run, with what the app heard and
+answered and a screenshot for each turn, is in [e2e/report/RUN_REPORT.md](e2e/report/RUN_REPORT.md); defects it
+found are in [e2e/DEFECTS.md](e2e/DEFECTS.md).
+
 ## Design decisions
 
 - **No API key on the build host**, so the eval used Claude through the `claude -p` CLI with a 2-step JSON protocol: plan
