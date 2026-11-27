@@ -1,0 +1,14 @@
+{
+  "name": "fleet-voice-agent-e2e",
+  "private": true,
+  "description": "Playwright end-to-end tests for fleet-voice-agent (voice journeys, edge cases, observability)",
+  "scripts": {
+    "test": "playwright test",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "22.10.2",
+    "typescript": "5.7.2"
+  }
+}
