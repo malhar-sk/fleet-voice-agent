@@ -1,0 +1,393 @@
+{
+ "sha": "da4d750aa707a64597cc9381804c2d4af991cdc2",
+ "branch": "e2e-playwright",
+ "ci": null,
+ "env": {
+  "llm_backend": "rules",
+  "host": "2 CPU, 8 GB RAM, linux 5.15.0-198-generic",
+  "playwright": "1.65.1",
+  "node": "v26.13.1",
+  "fleet": "pi-3 forced offline and silent > 130 s after 135 s of setup; pi-1, 2, 4, 5 online; random flapping off"
+ },
+ "stats": {
+  "startTime": "2026-11-27T15:21:35.441Z",
+  "duration": 543916.9650000001,
+  "expected": 18,
+  "skipped": 0,
+  "unexpected": 0,
+  "flaky": 0
+ },
+ "tests": [
+  {
+   "n": 1,
+   "file": "01-voice.spec.ts",
+   "title": "live voice (WebRTC): which devices are offline? › en01 [en] \"Which devices are offline right now?\"",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 13.9,
+   "turns": [
+    {
+     "lang": "en",
+     "transcript": "Which devices are offline right now?",
+     "answer": "1 of 5 devices are offline: pi 3. pi 3 has been silent for 2 minutes.",
+     "tools": [
+      "list_offline_devices"
+     ],
+     "meta": "tools: list_offline_devices({}) · stt 4974 ms · llm 9.3 ms · tts(first) 348.4 ms · voice-to-voice 5366.8 ms"
+    },
+    {
+     "lang": "en",
+     "transcript": "Which devices are offline right now?",
+     "answer": "1 of 5 devices are offline: pi 3. pi 3 has been silent for 2 minutes.",
+     "tools": [
+      "list_offline_devices"
+     ],
+     "meta": "tools: list_offline_devices({}) · stt 4974 ms · llm 9.3 ms · tts(first) 348.4 ms · voice-to-voice 5366.8 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 2,
+   "file": "01-voice.spec.ts",
+   "title": "live voice (WebRTC): which devices are offline? › hi01 [hi] \"अभी कौन से डिवाइस ऑफ़लाइन हैं?\"",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 13,
+   "turns": [
+    {
+     "lang": "hi",
+     "transcript": "आभी कोंछे दिवाईस अफलाइन है?",
+     "answer": "5 में से 1 डिवाइस ऑफ़लाइन हैं: pi 3। pi 3 3 मिनट से बंद है।",
+     "tools": [
+      "list_offline_devices"
+     ],
+     "meta": "tools: list_offline_devices({}) · stt 5052.4 ms · llm 0.7 ms · tts(first) 443.8 ms · voice-to-voice 5502.1 ms"
+    },
+    {
+     "lang": "hi",
+     "transcript": "आभी कोंछे दिवाईस अफलाइन है?",
+     "answer": "5 में से 1 डिवाइस ऑफ़लाइन हैं: pi 3। pi 3 3 मिनट से बंद है।",
+     "tools": [
+      "list_offline_devices"
+     ],
+     "meta": "tools: list_offline_devices({}) · stt 5052.4 ms · llm 0.7 ms · tts(first) 443.8 ms · voice-to-voice 5502.1 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 3,
+   "file": "01-voice.spec.ts",
+   "title": "live voice (WebRTC): which devices are offline? › mr01 [mr] \"सध्या कोणती उपकरणे ऑफलाइन आहेत?\"",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 14.4,
+   "turns": [
+    {
+     "lang": "mr",
+     "transcript": "सद्धा कोंती उपकरने अप्लाइ आहेत.",
+     "answer": "5 पैकी 4 उपकरणे ऑनलाइन आहेत, आणि pi 3 ऑफलाइन आहे.",
+     "tools": [
+      "list_devices"
+     ],
+     "meta": "tools: list_devices({}) · stt 5844.3 ms · llm 1.1 ms · tts(first) 680.4 ms · voice-to-voice 6546.4 ms"
+    },
+    {
+     "lang": "mr",
+     "transcript": "सद्धा कोंती उपकरने अप्लाइ आहेत.",
+     "answer": "5 पैकी 4 उपकरणे ऑनलाइन आहेत, आणि pi 3 ऑफलाइन आहे.",
+     "tools": [
+      "list_devices"
+     ],
+     "meta": "tools: list_devices({}) · stt 5844.3 ms · llm 1.1 ms · tts(first) 680.4 ms · voice-to-voice 6546.4 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 4,
+   "file": "01-voice.spec.ts",
+   "title": "live voice (WebRTC): device-specific questions › en07 [en] temperature of pi 2: names the device and gives a number in degrees",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 12.3,
+   "turns": [
+    {
+     "lang": "en",
+     "transcript": "What is the temperature of pi 2?",
+     "answer": "pi 2 temperature is 44 degrees now, averaging 49 degrees over the last 10 minutes.",
+     "tools": [
+      "query_metric"
+     ],
+     "meta": "tools: query_metric({\"device\":\"pi-2\",\"metric\":\"temperature\",\"minutes\":10}) · stt 4195.7 ms · llm 0.2 ms · tts(first) 716.7 ms · voice-to-voice 4937.2 ms"
+    },
+    {
+     "lang": "en",
+     "transcript": "What is the temperature of pi 2?",
+     "answer": "pi 2 temperature is 44 degrees now, averaging 49 degrees over the last 10 minutes.",
+     "tools": [
+      "query_metric"
+     ],
+     "meta": "tools: query_metric({\"device\":\"pi-2\",\"metric\":\"temperature\",\"minutes\":10}) · stt 4195.7 ms · llm 0.2 ms · tts(first) 716.7 ms · voice-to-voice 4937.2 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 5,
+   "file": "01-voice.spec.ts",
+   "title": "live voice (WebRTC): device-specific questions › hi05 [hi] status of pi 3: reply says it is offline, in hi",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 13.4,
+   "turns": [
+    {
+     "lang": "hi",
+     "transcript": "पाई 3 किस्थे तिक्या है?",
+     "answer": "pi 3 ऑफ़लाइन है, यह 3 मिनट से चुप है।",
+     "tools": [
+      "device_status"
+     ],
+     "meta": "tools: device_status({\"name\":\"pi-3\"}) · stt 6058 ms · llm 0.3 ms · tts(first) 498.6 ms · voice-to-voice 6573.2 ms"
+    },
+    {
+     "lang": "hi",
+     "transcript": "पाई 3 किस्थे तिक्या है?",
+     "answer": "pi 3 ऑफ़लाइन है, यह 3 मिनट से चुप है।",
+     "tools": [
+      "device_status"
+     ],
+     "meta": "tools: device_status({\"name\":\"pi-3\"}) · stt 6058 ms · llm 0.3 ms · tts(first) 498.6 ms · voice-to-voice 6573.2 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 6,
+   "file": "01-voice.spec.ts",
+   "title": "live voice (WebRTC): device-specific questions › mr05 [mr] status of pi 3: reply says it is offline, in mr",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 12.9,
+   "turns": [
+    {
+     "lang": "mr",
+     "transcript": "पाई 3 चिस्टिटिका आहे.",
+     "answer": "pi 3 ऑफलाइन आहे, ते 4 मिनिटांपासून बंद आहे.",
+     "tools": [
+      "device_status"
+     ],
+     "meta": "tools: device_status({\"name\":\"pi-3\"}) · stt 5187.4 ms · llm 0.3 ms · tts(first) 693.2 ms · voice-to-voice 5899.7 ms"
+    },
+    {
+     "lang": "mr",
+     "transcript": "पाई 3 चिस्टिटिका आहे.",
+     "answer": "pi 3 ऑफलाइन आहे, ते 4 मिनिटांपासून बंद आहे.",
+     "tools": [
+      "device_status"
+     ],
+     "meta": "tools: device_status({\"name\":\"pi-3\"}) · stt 5187.4 ms · llm 0.3 ms · tts(first) 693.2 ms · voice-to-voice 5899.7 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 7,
+   "file": "01-voice.spec.ts",
+   "title": "push-to-talk fallback (HTTP) en01: same answer path without WebRTC",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 15.2,
+   "turns": [
+    {
+     "lang": "en",
+     "transcript": "Which devices are offline right now?",
+     "answer": "1 of 5 devices are offline: pi 3. pi 3 has been silent for 4 minutes.",
+     "tools": [
+      "list_offline_devices"
+     ],
+     "meta": "tools: list_offline_devices({}) · stt 3387 ms · llm 0.1 ms · tts(first) 288.9 ms · voice-to-voice 3680.3 ms"
+    },
+    {
+     "lang": "en",
+     "transcript": "Which devices are offline right now?",
+     "answer": "1 of 5 devices are offline: pi 3. pi 3 has been silent for 4 minutes.",
+     "tools": [
+      "list_offline_devices"
+     ],
+     "meta": "tools: list_offline_devices({}) · stt 3387 ms · llm 0.1 ms · tts(first) 288.9 ms · voice-to-voice 3680.3 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 8,
+   "file": "02-edge.spec.ts",
+   "title": "silence › live mode with a silent mic: stays ready, invents no turn, can be stopped",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 15.7,
+   "turns": [],
+   "measured": []
+  },
+  {
+   "n": 9,
+   "file": "02-edge.spec.ts",
+   "title": "silence › push-to-talk with a silent mic: the user is told nothing was heard",
+   "outcome": "expected failure",
+   "defect": "DEF-002",
+   "seconds": 10.5,
+   "turns": [],
+   "measured": []
+  },
+  {
+   "n": 10,
+   "file": "02-edge.spec.ts",
+   "title": "noisy clip (en01 + pink noise, babble and hum at 10 dB SNR): still names the offline device",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 12.5,
+   "turns": [
+    {
+     "lang": "en",
+     "transcript": "Which devices are offline right now?",
+     "answer": "1 of 5 devices are offline: pi 3. pi 3 has been silent for 4 minutes.",
+     "tools": [
+      "list_offline_devices"
+     ],
+     "meta": "tools: list_offline_devices({}) · stt 4215.3 ms · llm 0.1 ms · tts(first) 390.4 ms · voice-to-voice 4611.2 ms"
+    },
+    {
+     "lang": "en",
+     "transcript": "Which devices are offline right now?",
+     "answer": "1 of 5 devices are offline: pi 3. pi 3 has been silent for 4 minutes.",
+     "tools": [
+      "list_offline_devices"
+     ],
+     "meta": "tools: list_offline_devices({}) · stt 4215.3 ms · llm 0.1 ms · tts(first) 390.4 ms · voice-to-voice 4611.2 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 11,
+   "file": "02-edge.spec.ts",
+   "title": "questions no tool can answer › en_oos_weather [en] \"What will the weather be like in Mumbai tomorrow?\": says what it can answer, calls no tool, same language",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 12.3,
+   "turns": [
+    {
+     "lang": "en",
+     "transcript": "What will the weather be like in Mumbai tomorrow?",
+     "answer": "I can only answer questions about the device fleet and the payment gateway.",
+     "tools": [],
+     "meta": "tools: none · stt 4449.4 ms · llm 0.1 ms · tts(first) 512.3 ms · voice-to-voice 4961.8 ms"
+    },
+    {
+     "lang": "en",
+     "transcript": "What will the weather be like in Mumbai tomorrow?",
+     "answer": "I can only answer questions about the device fleet and the payment gateway.",
+     "tools": [],
+     "meta": "tools: none · stt 4449.4 ms · llm 0.1 ms · tts(first) 512.3 ms · voice-to-voice 4961.8 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 12,
+   "file": "02-edge.spec.ts",
+   "title": "questions no tool can answer › hi_oos_cricket [hi] \"कल क्रिकेट मैच का स्कोर क्या था?\": says what it can answer, calls no tool, same language",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 12.8,
+   "turns": [
+    {
+     "lang": "hi",
+     "transcript": "कल ग्रिकेट मेजका स्कोर क्या था?",
+     "answer": "मैं सिर्फ़ डिवाइस फ़्लीट और पेमेंट गेटवे के बारे में बता सकता हूँ।",
+     "tools": [],
+     "meta": "tools: none · stt 5313.9 ms · llm 0.9 ms · tts(first) 575.1 ms · voice-to-voice 5889.9 ms"
+    },
+    {
+     "lang": "hi",
+     "transcript": "कल ग्रिकेट मेजका स्कोर क्या था?",
+     "answer": "मैं सिर्फ़ डिवाइस फ़्लीट और पेमेंट गेटवे के बारे में बता सकता हूँ।",
+     "tools": [],
+     "meta": "tools: none · stt 5313.9 ms · llm 0.9 ms · tts(first) 575.1 ms · voice-to-voice 5889.9 ms"
+    }
+   ],
+   "measured": []
+  },
+  {
+   "n": 13,
+   "file": "02-edge.spec.ts",
+   "title": "backend down › live mode when the backend is down: a visible error and the button resets",
+   "outcome": "expected failure",
+   "defect": "DEF-003",
+   "seconds": 35.4,
+   "turns": [],
+   "measured": []
+  },
+  {
+   "n": 14,
+   "file": "02-edge.spec.ts",
+   "title": "backend down › push-to-talk when the backend is down: a visible error, not a stuck 'thinking…'",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 25.6,
+   "turns": [],
+   "measured": []
+  },
+  {
+   "n": 15,
+   "file": "02-edge.spec.ts",
+   "title": "backend down › backend dies in the middle of a live turn: the user is told, the page does not hang",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 28.9,
+   "turns": [],
+   "measured": []
+  },
+  {
+   "n": 16,
+   "file": "03-observability.spec.ts",
+   "title": "make chaos pi-4 → Grafana › DeviceSilent fires after the 120 s threshold and within the rule's window",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 132,
+   "turns": [],
+   "measured": [
+    "measured: DeviceSilent fired 132 s after make chaos",
+    "measured: DeviceSilent fired 132 s after make chaos"
+   ]
+  },
+  {
+   "n": 17,
+   "file": "03-observability.spec.ts",
+   "title": "make chaos pi-4 → Grafana › the dashboard shows the device OFFLINE",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 7.2,
+   "turns": [],
+   "measured": [
+    "grafana-memory: 268 / 320 MiB (DEF-001 if this test fails)",
+    "grafana-memory: 268 / 320 MiB (DEF-001 if this test fails)"
+   ]
+  },
+  {
+   "n": 18,
+   "file": "03-observability.spec.ts",
+   "title": "make chaos pi-4 → Grafana › the alerting UI lists DeviceSilent as Firing",
+   "outcome": "passed",
+   "defect": null,
+   "seconds": 6,
+   "turns": [],
+   "measured": [
+    "grafana-memory: 292 / 320 MiB (DEF-001 if this test fails)",
+    "grafana-memory: 292 / 320 MiB (DEF-001 if this test fails)"
+   ]
+  }
+ ]
+}

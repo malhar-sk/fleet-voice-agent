@@ -58,6 +58,20 @@ jobs:
       - name: Run the Playwright suite
         run: npx playwright test
 
+      - name: Write the run report (RUN_REPORT.md) and show it on the run page
+        if: ${{ !cancelled() }}
+        run: |
+          node scripts/make-report.mjs
+          sed '/^## Details/,$d' report/RUN_REPORT.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the run report (Markdown + screenshots)
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-report
+          path: e2e/report
+          retention-days: 30
+
       - name: Upload the HTML report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4

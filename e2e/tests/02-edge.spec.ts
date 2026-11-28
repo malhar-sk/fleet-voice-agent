@@ -34,7 +34,6 @@ test("noisy clip (en01 + pink noise, babble and hum at 10 dB SNR): still names t
   await app.startLive();
   const turn = await app.nextTurn();
   await app.stopLive();
-  test.info().annotations.push({ type: "turn", description: JSON.stringify(turn) });
   expect.soft(turn.lang).toBe("en");
   expect(mentionsDevice(turn.answer, "pi-3"), turn.answer).toBe(true);
 });
@@ -47,7 +46,6 @@ test.describe("questions no tool can answer", () => {
       await app.startLive();
       const turn = await app.nextTurn();
       await app.stopLive();
-      test.info().annotations.push({ type: "turn", description: JSON.stringify(turn) });
       expect.soft(turn.tools, "no fleet tool for an off-topic question").toEqual([]);
       expect.soft(replyLanguage(turn.answer), turn.answer).toBe(c.lang);
       // The reply must steer the user back to what it CAN do, not make something up.

@@ -4,7 +4,8 @@
   "description": "Playwright end-to-end tests for fleet-voice-agent (voice journeys, edge cases, observability)",
   "scripts": {
     "test": "playwright test",
-    "report": "playwright show-report"
+    "report": "playwright show-report",
+    "report:md": "node scripts/make-report.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.65.1",

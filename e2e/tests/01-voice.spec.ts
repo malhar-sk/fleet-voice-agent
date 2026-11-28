@@ -23,7 +23,6 @@ test.describe("live voice (WebRTC): which devices are offline?", () => {
       const turn = await app.nextTurn();
       await app.stopLive();
 
-      test.info().annotations.push({ type: "turn", description: JSON.stringify(turn) });
       expect.soft(turn.transcript, "a transcript is shown").not.toBe("");
       expect.soft(script(turn.transcript), "transcript script").toBe(q.lang === "en" ? "latin" : "devanagari");
       expect.soft(turn.lang, "language the app detected").toBe(q.lang);

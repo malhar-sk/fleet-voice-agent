@@ -3,6 +3,7 @@
 # (e.g. a shared server where you cannot apt-get). The stack must already be up (`make up`).
 #   bash e2e/run-in-docker.sh                 # whole suite
 #   bash e2e/run-in-docker.sh tests/01-voice.spec.ts --grep en01
+# After the run it writes e2e/report/RUN_REPORT.md (scripts/make-report.mjs), whatever the result.
 # The repo is mounted at the same path as on the host and the host's docker CLI + socket are passed in,
 # so the fleet-control helpers (the same commands as `make chaos` / `make recover`) work inside the container.
 set -euo pipefail
@@ -16,4 +17,4 @@ exec docker run --rm --network host --ipc=host \
   -v "$PWD:$PWD" -w "$PWD/e2e" \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v "$(command -v docker):/usr/bin/docker:ro" -v "$PLUGINS:/usr/libexec/docker/cli-plugins:ro" \
-  "$IMAGE" sh -c 'npm ci --no-audit --no-fund --loglevel=error && npx playwright test "$@"' sh "$@"
+  "$IMAGE" sh -c 'npm ci --no-audit --no-fund --loglevel=error && { npx playwright test "$@"; rc=$?; node scripts/make-report.mjs; exit $rc; }' sh "$@"

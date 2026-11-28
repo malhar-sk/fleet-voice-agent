@@ -74,12 +74,17 @@ export class VoiceApp {
     // 60 s: STT (Whisper small, 1 CPU) takes ~5-8 s per question on the build VPS, plus VAD end-of-speech.
     const t = this.turns.first();
     await expect(t).toBeVisible({ timeout });
-    return {
+    const turn: Turn = {
       lang: (await t.getAttribute("data-lang")) ?? "",
       transcript: (await t.getByTestId("turn-transcript").innerText()).trim(),
       answer: (await t.getByTestId("turn-answer").innerText()).trim(),
       tools: JSON.parse((await t.getAttribute("data-tools")) ?? "[]") as string[],
     };
+    // Evidence for e2e/report/RUN_REPORT.md: what was heard and said, and what the user saw.
+    const meta = (await t.getByTestId("turn-meta").innerText()).trim();
+    base.info().annotations.push({ type: "turn", description: JSON.stringify({ ...turn, meta }) });
+    await base.info().attach("turn", { body: await t.screenshot(), contentType: "image/png" });
+    return turn;
   }
 }
 
